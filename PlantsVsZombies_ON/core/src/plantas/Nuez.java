@@ -1,0 +1,13 @@
+package plantas;
+
+public class Nuez extends Planta {
+
+	public Nuez() {
+		super("Nuez", 50, 100, 0);
+	
+		super.setRecarga(RECARGA_LENTA);
+		super.setImagen("img/plants/nut.png", 100, 100);
+		super.setAnimacion("img/plants/sprites_nut.png", 5, 0.2f);
+	}
+	
+}

@@ -1,0 +1,134 @@
+package plantas;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import recursos.Imagen;
+import recursos.Render;
+
+public abstract class Planta {
+
+	private String nombre;
+	private int coste;
+	private int vida;
+	private int cooldown;
+	private float tiempoRecarga = 0f;
+	private int damage;
+	
+	private Imagen imagen;
+	
+	private Animation<TextureRegion> animation;
+	private TextureRegion frameActual;
+	private TextureRegion[] regions;
+	private float tiempoAnimacion;
+	private Texture textura;
+	public int animationX;
+	public int animationY;
+    
+    private boolean animacionPausada;
+    private Imagen noCargado;
+	
+	
+	public Planta(String nombre, int coste, int vida, int cooldown, int damage) {
+		this.nombre = nombre;
+		this.coste = coste;
+		this.vida = vida;
+		this.cooldown = cooldown;
+		this.damage = damage;
+		this.animationX = 0;
+		this.animationY = 0;
+	}
+	
+	public void dibujar() {
+		imagen.dibujar();
+
+	}
+	
+    public void animacionIddle() {
+        if (!animacionPausada) {
+            tiempoAnimacion += Gdx.graphics.getDeltaTime(); // Acumula el delta time
+            frameActual = animation.getKeyFrame(tiempoAnimacion, true);
+        }
+        Render.batch.begin();
+        Render.batch.draw(frameActual, animationX, animationY);
+        Render.batch.end();
+    }
+    
+    public boolean cargaFinalizada() {
+    	if(tiempoRecarga < cooldown) {
+    		tiempoRecarga += Render.getDeltaTime();
+        	System.out.println(this);
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+    
+    public void reiniciarRecarga() {
+    	tiempoRecarga = 0f;
+    }
+	
+	public int getCoste() {
+		return coste;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public float getTiempoRecarga() {
+		return tiempoRecarga;
+	}
+	
+	public void setImagen(String ruta, int ancho, int alto) {
+		imagen = new Imagen(ruta, ancho, alto);
+		noCargado = new Imagen("img/black.png", 2000, 2000);
+	}
+	
+	public void setAnimacion(String ruta, int cantidadFrames, float velocidadFrames) {
+		textura = new Texture(ruta);
+		TextureRegion[][] temp = TextureRegion.split(textura, textura.getWidth()/cantidadFrames, textura.getHeight());
+		
+		regions = new TextureRegion[cantidadFrames];
+		for (int i = 0; i < regions.length; i++) {
+			regions[i] = temp[0][i];
+		}
+		animation = new Animation<TextureRegion>(velocidadFrames, regions);
+		tiempoAnimacion = 0f;
+	}
+	
+    public void pausarAnimacionEnFrame(int frameIndex) {
+        if (frameIndex >= 0 && frameIndex < regions.length) {
+            animacionPausada = true;
+            frameActual = regions[frameIndex];
+        }
+    }
+
+    public void reanudarAnimacion() {
+        animacionPausada = false;
+    }
+	
+	public void setSize(int ancho, int alto) {
+		imagen.setSize(ancho, alto);
+	}
+	
+	public void setX(int x) {
+		imagen.setX(x);
+	}
+	
+	public void setY(int y) {
+		imagen.setY(y);
+	}
+	
+	public void dispose() {
+		
+		// Imagenes
+		imagen.dispose();
+		textura.dispose();
+		
+	}
+	
+}

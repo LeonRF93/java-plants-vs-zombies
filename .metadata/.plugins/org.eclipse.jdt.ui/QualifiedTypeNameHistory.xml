@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.security.Principal"/>
+    <fullyQualifiedTypeName name="com.lionstavern.pvz.Principal"/>
+    <fullyQualifiedTypeName name="recursos.Utiles"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.Gdx"/>
+    <fullyQualifiedTypeName name="mapasCasillas.Casilla"/>
+    <fullyQualifiedTypeName name="pantallas.PantallaInicio"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.lang.StringIndexOutOfBoundsException"/>
+    <fullyQualifiedTypeName name="pantallas.Menu"/>
+    <fullyQualifiedTypeName name="recursos.EntradasMenu"/>
+    <fullyQualifiedTypeName name="recursos.Entradas"/>
+    <fullyQualifiedTypeName name="recursos.Globales"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.GlyphLayout"/>
+    <fullyQualifiedTypeName name="javax.swing.plaf.synth.SynthOptionPaneUI"/>
+</qualifiedTypeNameHistroy>

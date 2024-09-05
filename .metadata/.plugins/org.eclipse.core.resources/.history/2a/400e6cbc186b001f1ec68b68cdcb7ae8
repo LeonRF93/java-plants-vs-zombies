@@ -1,0 +1,14 @@
+package recursos;
+
+public class Globales {
+
+	// Audio
+	public static float volumenSfx = 1.0f;
+	public static boolean musicaOn = true;
+	public static boolean sfxOn = true;
+	
+	public static String plantaReiniciarCooldown = "";
+	
+	public static boolean pausa = false;
+	
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;PlantsVsZombies_ON/assets/img/hud/hud.png&apos; to &apos;fondo_hud.png&apos;" description="Rename resource &apos;hud.png&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="assets/img/hud/hud.png" name="fondo_hud.png" stamp="1723159872326" updateReferences="true"/>
+</session>
