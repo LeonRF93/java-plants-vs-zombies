@@ -92,8 +92,8 @@ public class Mapa {
 	public void pausar() {
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
-				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().pausarAnimacionEnFrame(1);
+				if(casillas[i][j].getPlantaZombie() != null) {
+				casillas[i][j].getPlantaZombie().pausarAnimacionEnFrame(1);
 				}
 			}
 		}
@@ -102,8 +102,8 @@ public class Mapa {
 	public void reanudar() {
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
-				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().reanudarAnimacion();
+				if(casillas[i][j].getPlantaZombie() != null) {
+				casillas[i][j].getPlantaZombie().reanudarAnimacion();
 				}
 			}
 		}

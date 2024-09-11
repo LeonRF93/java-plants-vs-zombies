@@ -12,16 +12,17 @@ import com.lionstavern.pvz.PvzPrincipal;
 
 import hud.Hud;
 import mapas.Mapa;
+import plantaYzombie.PlantaZombie;
 import plantas.Girasol;
 import plantas.Lanzaguisantes;
 import plantas.Nuez;
-import plantas.Planta;
 import recursos.Entradas;
 import recursos.Globales;
 import recursos.Imagen;
 import recursos.Render;
 import recursos.Texto;
 import solesCerebros.Sol;
+import zombies.ZombieBasico;
 
 public class Partida implements Screen {
 
@@ -37,7 +38,7 @@ public class Partida implements Screen {
 	// Plantas y casillas
 	private int casillasX = 230, casillasY = 380;
 
-	private Planta[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol() };
+	private PlantaZombie[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol(), new ZombieBasico() };
 //	private Planta[] plantas = { new Lanzaguisantes(), new Nuez()};
 //	private Planta[] plantas = { new Girasol()};
 	

@@ -137,9 +137,9 @@ public abstract class PlantaZombie {
 	}
 
 	public void setNoCargadoYSinSoles(int x, int y, int ancho, int alto) {
-		if (!esDisponibleAlInicio) { // esto es para setearle la posicion al noCargado la primera vez a aquellas
-										// plantas que no estan disponibles de primeras a diferencia del girasol x
-										// ejemplo
+		if (!esDisponibleAlInicio) { // esto es para setearle la posicion al "noCargado" la primera vez a aquellas
+										// plantas/zombies que no estan disponibles de primeras a diferencia del girasol 
+										// por ejemplo
 			noCargado.setPosition(x, y);
 			noCargado.setSize(ancho, alto);
 			esDisponibleAlInicio = true;

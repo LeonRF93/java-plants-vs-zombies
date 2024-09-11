@@ -1,19 +1,12 @@
 package zombies;
 
+import plantaYzombie.PlantaZombie;
 import recursos.Imagen;
 
-public class Zombie {
-
-	private int coste;
-	private int vida;
-	private int recarga;
-	private int velocidad = 10;
-	private Imagen imagen;
+public class Zombie extends PlantaZombie {
 	
-	public Zombie(int coste, int vida, int recarga, Imagen imagen) {
-		this.coste = coste;
-		this.vida = vida;
-		this.recarga = recarga;
+	public Zombie(String nombre, int coste, int vida, int damage) {
+		super(nombre, coste, vida, damage);
 	}
 	
 }

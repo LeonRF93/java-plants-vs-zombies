@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
+import plantaYzombie.PlantaZombie;
 import plantas.Planta;
 import recursos.Entradas;
 import recursos.Globales;
@@ -27,21 +28,21 @@ public class Hud {
 	public int DISTANCIA_ENTRE_SEEDS = 58;
 	private int anchoSeed = 46 , altoSeed = 65;
 	private int y = Render.ALTO - 71;
-	private Planta[] plantas;
-	public static int indPlantaClickeada = -1;
+	private PlantaZombie[] plantasZombies;
+	public static int indiceClickeado = -1;
 	private int indPlantaClickeadaAux = -1;
 
 	private Imagen fondo;
 
 	private Imagen seed;
-	private Planta[] plantasSeleccionadas;
+	private PlantaZombie[] seleccionadas;
 	private Rectangle[] hitbox;
-	public static String nombrePlantaClickeda = "";
+	public static String nombreClickedo = "";
 
 	private boolean clickeado;
 	private float delay = 0;
 
-	private Texto[] costePlantas;
+	private Texto[] costePlantaZombie;
 
 	// Soles
 	private Imagen sunFrame;
@@ -57,14 +58,14 @@ public class Hud {
 	private float tiempoAnimacionChiwawa = 0f;
 	private boolean rojoTextoSoles;
 	
-	public Hud(Planta[] plantas) {
+	public Hud(PlantaZombie[] plantasZombies) {
 
 		fondo = new Imagen("img/hud/fondo_hud.png", 1202 / 2, 156 / 2);
 		fondo.setPosition(10, Render.ALTO - 77);
 
-		this.plantas = plantas;
-		this.plantasSeleccionadas = plantas;
-		hitbox = new Rectangle[plantas.length];
+		this.plantasZombies = plantasZombies;
+		this.seleccionadas = plantasZombies;
+		hitbox = new Rectangle[plantasZombies.length];
 		seed = new Imagen("img/hud/seed.png", anchoSeed, altoSeed);
 
 		sunFrame = new Imagen("img/hud/suncounter.png", 68, 156 / 2);
@@ -76,18 +77,18 @@ public class Hud {
 		textoSoles.y = Y_TEXTO;
 		textoSoles.texto = String.valueOf(cantSoles);
 
-		for (int i = 0; i < plantas.length; i++) {
+		for (int i = 0; i < plantasZombies.length; i++) {
 			hitbox[i] = new Rectangle(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, anchoSeed, altoSeed);
 																						
 		}
 
-		costePlantas = new Texto[plantas.length]; // hay darle una longitud a un array antes d darle valores para q no
+		costePlantaZombie = new Texto[plantasZombies.length]; // hay darle una longitud a un array antes d darle valores para q no
 													// tire error
 
-		for (int i = 0; i < plantas.length; i++) {
-			costePlantas[i] = new Texto("fonts/Minecraft.ttf", X_ESCALA - 9, Color.BLACK, false);
-			costePlantas[i].y = 482;
-			costePlantas[i].texto = String.valueOf(plantas[i].getCoste());
+		for (int i = 0; i < plantasZombies.length; i++) {
+			costePlantaZombie[i] = new Texto("fonts/Minecraft.ttf", X_ESCALA - 9, Color.BLACK, false);
+			costePlantaZombie[i].y = 482;
+			costePlantaZombie[i].texto = String.valueOf(plantasZombies[i].getCoste());
 		}
 
 		select = Gdx.audio.newSound(Gdx.files.internal("audio/seed.mp3"));
@@ -105,35 +106,35 @@ public class Hud {
 		funcionesTextoSoles();
 
 
-		for (int i = 0; i < plantas.length; i++) {
+		for (int i = 0; i < plantasZombies.length; i++) {
 			seed.setY(y);
-			plantas[i].setY(y + 20);
-			plantas[i].setSize(33, 33);
+			plantasZombies[i].setY(y + 20);
+			plantasZombies[i].setSize(33, 33);
 			seed.setX(xInicial + DISTANCIA_ENTRE_SEEDS * i);
 			seed.dibujar();
-			plantas[i].setX(xInicial + 7 + DISTANCIA_ENTRE_SEEDS * i);
-			plantas[i].setNoCargadoYSinSoles(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, 46, 65);
-			plantas[i].dibujar();
-			plantas[i].reproducirCooldown();
-			plantas[i].solesSuficientes(cantSoles);
+			plantasZombies[i].setX(xInicial + 7 + DISTANCIA_ENTRE_SEEDS * i);
+			plantasZombies[i].setNoCargadoYSinSoles(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, 46, 65);
+			plantasZombies[i].dibujar();
+			plantasZombies[i].reproducirCooldown();
+			plantasZombies[i].solesSuficientes(cantSoles);
 			
-			if(plantas[i].getNombre() == Globales.plantaReiniciarCooldown) {
-				plantas[i].reiniciarCooldown();
+			if(plantasZombies[i].getNombre() == Globales.plantaReiniciarCooldown) {
+				plantasZombies[i].reiniciarCooldown();
 				Globales.plantaReiniciarCooldown = "";
 			}
 
 		}
 
-		for (int i = 0; i < costePlantas.length; i++) {
-			costePlantas[i].dibujar();
-			costePlantas[i].x = 105 + DISTANCIA_ENTRE_SEEDS * i;
+		for (int i = 0; i < costePlantaZombie.length; i++) {
+			costePlantaZombie[i].dibujar();
+			costePlantaZombie[i].x = 105 + DISTANCIA_ENTRE_SEEDS * i;
 		}
 
 	}
 
 	public int clickearPlanta() {
 
-		if (clickeado) { // esto es para evitar que, si tenemos el mouse cerca de una casilla, la planta
+		if (clickeado) { // esto es para evitar que, si tenemos el mouse cerca de una casilla, la planta/zombie
 							// se plante ni bien la elegimos
 			delayClick();
 		}
@@ -144,13 +145,13 @@ public class Hud {
 			if (hitbox[i].contains(Entradas.getMouseX(), Entradas.getMouseY())) {
 				if (Entradas.getBotonMouse() == 0) {
 					if (unaVezClick) {
-						if (plantas[i].getCoste() > cantSoles || !plantas[i].recargaFinalizada()) {
+						if (plantasZombies[i].getCoste() > cantSoles || !plantasZombies[i].recargaFinalizada()) {
 							cancel.play(Globales.volumenSfx);
-							if(plantas[i].getCoste() > cantSoles) { // la anmacion de chiwawawa solo se active cuando no tenes soles
+							if(plantasZombies[i].getCoste() > cantSoles) { // la anmacion de chiwawawa solo se active cuando no tenes soles
 								chiwawawaOn = true;
 							}
 						} else {
-							nombrePlantaClickeda = plantas[i].getNombre();
+							nombreClickedo = plantasZombies[i].getNombre();
 							select.play(Globales.volumenSfx);
 							clickeado = true;
 							indPlantaClickeadaAux = i;
@@ -163,30 +164,30 @@ public class Hud {
 				}
 			}
 
-			// que la planta siga al mouse
-			if (indPlantaClickeada != -1) {
-				plantasSeleccionadas[indPlantaClickeada].setX(Entradas.getMouseX() - 20);
-				plantasSeleccionadas[indPlantaClickeada].setY(Entradas.getMouseY() - 10);
-				plantasSeleccionadas[indPlantaClickeada].dibujar();
+			// que la planta/zombie siga al mouse
+			if (indiceClickeado != -1) {
+				seleccionadas[indiceClickeado].setX(Entradas.getMouseX() - 20);
+				seleccionadas[indiceClickeado].setY(Entradas.getMouseY() - 10);
+				seleccionadas[indiceClickeado].dibujar();
 
-				// si haces click derecho o clickeas fuera del jardin, la planta desaparece
+				// si haces click derecho o clickeas fuera del jardin, la planta/zombie desaparece
 				if (Entradas.getBotonMouse() == 1) {
 					deselect.play(Globales.volumenSfx);
-					indPlantaClickeada = -1;
+					indiceClickeado = -1;
 
 				}
 
 			}
 		}
 
-		return indPlantaClickeada;
+		return indiceClickeado;
 	}
 
 	private void delayClick() {
 		delay += Render.getDeltaTime();
 
 		if (delay > 0.1f) {
-			indPlantaClickeada = indPlantaClickeadaAux;
+			indiceClickeado = indPlantaClickeadaAux;
 			delay = 0;
 			clickeado = false;
 		}
@@ -263,17 +264,17 @@ public class Hud {
 		textoSoles.dispose();
 
 		// Texto
-		for (int i = 0; i < costePlantas.length; i++) {
-			costePlantas[i].dispose();
+		for (int i = 0; i < costePlantaZombie.length; i++) {
+			costePlantaZombie[i].dispose();
 		}
 
 		// Otros
-		for (int i = 0; i < plantas.length; i++) {
-			plantas[i].dispose();
+		for (int i = 0; i < plantasZombies.length; i++) {
+			plantasZombies[i].dispose();
 		}
 
-		for (int i = 0; i < plantasSeleccionadas.length; i++) {
-			plantasSeleccionadas[i].dispose();
+		for (int i = 0; i < seleccionadas.length; i++) {
+			seleccionadas[i].dispose();
 		}
 
 	}
