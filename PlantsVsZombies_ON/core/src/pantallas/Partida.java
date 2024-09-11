@@ -91,7 +91,7 @@ public class Partida implements Screen {
 		Hud.cantSoles = 5000;
 		
 		// La imagen del fondo toma el ANCHO y el ALTO del Render.
-		// Le sumamos 300 al ANCHO para ajustar la imagen no se vea estirada
+		// Le sumamos 300 al ANCHO para ajustar la imagen y que no se vea estirada
 		Imagen imgDia = new Imagen("img/escenarios/dia.png", Render.ANCHO + 300, Render.ALTO);
 
 		Music mscDia = Gdx.audio.newMusic(Gdx.files.internal("audio/Day-Stage_.mp3"));
