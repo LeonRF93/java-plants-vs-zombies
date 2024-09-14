@@ -39,8 +39,8 @@ public class Partida implements Screen {
 	private int casillasX = 230, casillasY = 380;
 
 	private PlantaZombie[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol(), new ZombieBasico() };
-//	private Planta[] plantas = { new Lanzaguisantes(), new Nuez()};
-//	private Planta[] plantas = { new Girasol()};
+//	private Planta[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol() };
+//	private Zombie[] plantas = { new ZombieBasico() };
 	
 	// Camara
 
@@ -142,7 +142,6 @@ public class Partida implements Screen {
 	public void render(float delta) {
 
 		camara.update();
-//		Render.limpiarPantalla(0, 0, 0, 1);
 		ajustarVolumen();
 
 		if (!finCamaraInicial) {

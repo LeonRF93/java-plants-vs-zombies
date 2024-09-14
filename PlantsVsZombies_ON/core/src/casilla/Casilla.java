@@ -12,6 +12,7 @@ import plantaYzombie.PlantasZombies;
 import plantas.Planta;
 import recursos.Entradas;
 import recursos.Globales;
+import zombies.Caminable;
 
 public class Casilla {
 
@@ -40,6 +41,10 @@ public class Casilla {
 		// una vez planta la planta, reproducir su animación
 		if(plantaZombie != null) {
 			plantaZombie.animacionIddle();
+			
+	        if (plantaZombie instanceof Caminable) {
+	            ((Caminable) plantaZombie).caminar(); // WTF está re roto eso
+	        }
 		}
 		
 		// si no es -1 significa que hay una planta seleccionada
