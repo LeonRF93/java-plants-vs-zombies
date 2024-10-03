@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;PlantsVsZombies_ON/assets/img/zombies/lol.png&apos;" deleteContents="false" description="Delete resource &apos;PlantsVsZombies_ON/assets/img/zombies/lol.png&apos;" element1="/PlantsVsZombies_ON/assets/img/zombies/lol.png" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1726291127507"/>
+</session>
