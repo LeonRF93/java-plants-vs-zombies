@@ -22,7 +22,7 @@ public enum PlantasZombies {
 		this.paquete = paquete;
 	}
 	
-	public static PlantaZombie obtenerPlanta(String nombre) {
+	public static PlantaZombie obtenerPlantaZombie(String nombre) {
 
 		
 		

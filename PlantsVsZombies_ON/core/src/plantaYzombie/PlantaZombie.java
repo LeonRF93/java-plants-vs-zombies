@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 import pantallas.Partida;
 import recursos.Imagen;
@@ -42,6 +44,9 @@ public abstract class PlantaZombie {
 	protected int RECARGA_RAPIDA = 5;
 	private float restaNoCargado;
 	
+	//hitbox
+	protected Rectangle hitbox;
+	private ShapeRenderer contorno = new ShapeRenderer();;
 
 
 	public PlantaZombie(String nombre, int coste, int vida, int damage) {
@@ -57,6 +62,15 @@ public abstract class PlantaZombie {
 		imagen.dibujar();
 		noCargado.dibujar();
 		sinSolesSuficientes.dibujar();
+	}
+	
+	public void dibujarHitbox(float x, float y, float ancho, float alto) {
+		contorno.begin(ShapeRenderer.ShapeType.Line);
+
+		contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contorno.rect(x, y, ancho, alto);
+
+		contorno.end();
 	}
 
 	public void animacionIddle() {
@@ -109,6 +123,14 @@ public abstract class PlantaZombie {
 
 	public float getTiempoRecarga() {
 		return tiempoRecarga;
+	}
+	
+	public Rectangle getHitbox() {
+		return hitbox;
+	}
+	
+	public void setHitbox(int x, int y, int ancho, int alto) {
+		this.hitbox = new Rectangle(x, y, ancho, alto);
 	}
 	
 	protected void setRecarga(int recarga) {

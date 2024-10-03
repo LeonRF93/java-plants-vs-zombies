@@ -48,6 +48,7 @@ public class Mapa {
 
 	}
 
+	
 	private void detectarCasilla(int i, int j) {
 		casillas[i][j].detectar();
 	}
@@ -92,19 +93,44 @@ public class Mapa {
 	public void pausar() {
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
-				if(casillas[i][j].getPlantaZombie() != null) {
-				casillas[i][j].getPlantaZombie().pausarAnimacionEnFrame(1);
+				
+				// plantas
+				if(casillas[i][j].getPlanta() != null) {
+				casillas[i][j].getPlanta().pausarAnimacionEnFrame(1);
+				}
+				
+				// zombies
+				if(casillas[i][j].getZombie().size() > 0) {
+					
+					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
+						casillas[i][j].getZombie().get(k).pausarAnimacionEnFrame(1);
+					}
+
 				}
 			}
 		}
+
 	}
+	
 	
 	public void reanudar() {
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
-				if(casillas[i][j].getPlantaZombie() != null) {
-				casillas[i][j].getPlantaZombie().reanudarAnimacion();
+				
+				// plantas
+				if(casillas[i][j].getPlanta() != null) {
+				casillas[i][j].getPlanta().reanudarAnimacion();
 				}
+				
+				// zombies
+				if(casillas[i][j].getZombie().size() > 0) {
+					
+					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
+						casillas[i][j].getZombie().get(k).reanudarAnimacion();
+					}
+
+				}
+				
 			}
 		}
 	}

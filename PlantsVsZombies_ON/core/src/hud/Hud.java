@@ -60,6 +60,12 @@ public class Hud {
 	
 	public Hud(PlantaZombie[] plantasZombies) {
 
+		constructor(plantasZombies);
+		
+	}
+	
+	private void constructor(PlantaZombie[] plantasZombies) {
+		
 		fondo = new Imagen("img/hud/fondo_hud.png", 1202 / 2, 156 / 2);
 		fondo.setPosition(10, Render.ALTO - 77);
 

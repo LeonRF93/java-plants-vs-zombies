@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="nombrePla"/>
+		<item key="selection" value="pausa"/>
 		<list key="findhistory">
-			<item value="nombrePla"/>
-			<item value="reiniciar"/>
-			<item value="carga"/>
-			<item value="carg"/>
-			<item value="reca"/>
-			<item value="rec"/>
-			<item value="reg"/>
-			<item value="tiempo"/>
-			<item value="float"/>
-			<item value="cancel"/>
-			<item value="chiwawa"/>
-			<item value="textoSoles"/>
-			<item value="fondo"/>
-			<item value="fondox"/>
-			<item value="back"/>
+			<item value="pausa"/>
+			<item value="getPlantaZombie"/>
+			<item value="camin"/>
+			<item value="ali"/>
+			<item value="alien"/>
+			<item value="selector"/>
+			<item value="camaraIn"/>
+			<item value="camara"/>
+			<item value="atl"/>
+			<item value="animacionI"/>
+			<item value="animacion"/>
+			<item value="alinea"/>
+			<item value="casillasX"/>
+			<item value="planta"/>
+			<item value="plantasSeleccionadas"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Entradas"/>
@@ -31,7 +31,7 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item key="DIALOG_X_ORIGIN" value="1479"/>
-		<item key="DIALOG_Y_ORIGIN" value="378"/>
+		<item key="DIALOG_Y_ORIGIN" value="617"/>
 		<item key="DIALOG_WIDTH" value="322"/>
 		<item key="DIALOG_HEIGHT" value="391"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>

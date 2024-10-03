@@ -100,7 +100,7 @@ public class Partida implements Screen {
 		Vector2 alineacionGrilla = new Vector2(casillasX, casillasY);
 
 		dia = new Mapa("Día", imgDia, mscDia, filas, columnas, alineacionGrilla);
-
+		Globales.mapa = dia;
 		camara = new OrthographicCamera(Render.ANCHO, Render.ALTO);
 		camara.position.set(Render.ANCHO / 2, Render.ALTO / 2, 0);
 		camaraHud = new OrthographicCamera(Render.ANCHO, Render.ALTO);
@@ -153,7 +153,7 @@ public class Partida implements Screen {
 		Render.batch.setProjectionMatrix(camara.combined);
 		Render.batch.begin();
 
-		dia.getFondo().dibujar();
+		Globales.mapa.getFondo().dibujar();
 
 		Render.batch.end();
 
@@ -173,7 +173,7 @@ public class Partida implements Screen {
 
 		Render.batch.setProjectionMatrix(camara.combined);
 
-		dia.correr();
+		Globales.mapa.correr();
 		Render.batch.begin();
 
 		sol.dibujar();
@@ -215,12 +215,12 @@ public class Partida implements Screen {
 			if (!unaVezPausa) {
 				pausa.play(Globales.volumenSfx);
 				if (finCamaraInicial) {
-					dia.pausarMusica();
+					Globales.mapa.pausarMusica();
 				}
 				unaVezPausa = true;
 			}
 			menuPausa();
-			dia.pausar();
+			Globales.mapa.pausar();
 
 			// boton back to game el cual tendría que ir adentro del menuPausa() pero
 			// creeme, creeme que no queres hacer eso
@@ -233,11 +233,11 @@ public class Partida implements Screen {
 			if (unaVezPausa) {
 				pausa.play(Globales.volumenSfx);
 				if (finCamaraInicial) {
-					dia.playMusica();
+					Globales.mapa.playMusica();
 				}
 				unaVezPausa = false;
 			}
-			dia.reanudar();
+			Globales.mapa.reanudar();
 		}
 
 	}
@@ -298,9 +298,9 @@ public class Partida implements Screen {
 	private void ajustarVolumen() {
 
 		if (Globales.musicaOn) {
-			dia.desmutearMusica();
+			Globales.mapa.desmutearMusica();
 		} else {
-			dia.mutearMusica();
+			Globales.mapa.mutearMusica();
 			selector.stop();
 		}
 
@@ -316,7 +316,7 @@ public class Partida implements Screen {
 
 		if (!onOff) {
 			if (!unaVezCamaraInicial) {
-				dia.playMusica();
+				Globales.mapa.playMusica();
 				finCamaraInicial = true;
 				unaVezCamaraInicial = true;
 			}
@@ -367,7 +367,7 @@ public class Partida implements Screen {
 			tiempoAnimacion++;
 		}
 		if (tiempoAnimacion == 200) {
-			dia.playMusica();
+			Globales.mapa.playMusica();
 			finCamaraInicial = true;
 		}
 		return true;
