@@ -5,11 +5,11 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 
 import hud.Hud;
-import recursos.Entradas;
-import recursos.Globales;
-import recursos.Imagen;
-import recursos.Render;
-import recursos.Utiles;
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Imagen;
+import utilidades.Render;
+import utilidades.Utiles;
 
 public class SolCerebro {
 

@@ -1,14 +1,16 @@
-package recursos;
+package utilidades;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 
-import mapas.Mapa;
+import jardines.Jardin;
 
 public class Globales {
 
-	// Audio
+	// Pausa
+	public static boolean pausaActiva;
+	
 	public static float volumenSfx = 1.0f;
 	public static boolean musicaOn = true;
 	public static boolean sfxOn = true;
@@ -16,7 +18,7 @@ public class Globales {
 	// Otros
 	public static String plantaReiniciarCooldown = "";
 	
-	//Mapa
-	public static Mapa mapa;
+	//Jardin
+	public static Jardin jardin;
 	
 }

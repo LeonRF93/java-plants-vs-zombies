@@ -1,4 +1,4 @@
-package mapas;
+package jardines;
 
 import java.util.Iterator;
 
@@ -6,38 +6,35 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 
 import casilla.Casilla;
-import recursos.Imagen;
-import recursos.Render;
+import utilidades.Imagen;
+import utilidades.Render;
 
-public class Mapa {
-
+public abstract class Jardin {
+	
+	// Datos generales
 	private String nombre;
 	private Imagen fondo;
 	private Music musica;
+	
+	// Casillas
 	private int filasCasillas;
 	private int columnasCasillas;
 	private Vector2 alineacionGrilla; // alineacionGrilla es la posicion inicial de la primera casilla.
 	private Casilla[][] casillas;
-
 	private int distanciaFilas = 6;  // distanciaFilas es la distancia entre cada fila
 	private int distanciaColumnas = 2; // distanciaColumnas es la distancia entre cada columna
-
-	public Mapa(String nombre, Imagen fondo, Music musica, int filasCasillas, int columnasCasillas,
-			Vector2 alineacionGrilla) {
+	
+	public Jardin(String nombre, int filasCasillas, int columnasCasillas) {
 		this.nombre = nombre;
-		this.fondo = fondo;
-		this.musica = musica;
 		this.filasCasillas = filasCasillas;
 		this.columnasCasillas = columnasCasillas;
-		this.alineacionGrilla = alineacionGrilla;
 		this.casillas = new Casilla[filasCasillas][columnasCasillas];
-		this.musica.setLooping(true);
-
-		crearCasillas();
-
+		
+		// inicializar objetos a traves del metodo homonimo
 	}
 
-	public void correr() {
+	public void ejecutar() {
+		
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
 				mostrarCasilla(i, j);
@@ -45,33 +42,6 @@ public class Mapa {
 			}
 		}
 
-
-	}
-
-	
-	private void detectarCasilla(int i, int j) {
-		casillas[i][j].detectar();
-	}
-
-	private void mostrarCasilla(int i, int j) {
-		casillas[i][j].mostrar();
-	}
-
-	private void crearCasillas() {
-		for (int i = 0; i < casillas.length; i++) {
-			for (int j = 0; j < casillas[i].length; j++) {
-				// se multiplica por "j" porque j es la cantidad de casillas que hay
-				casillas[i][j] = new Casilla(((int) alineacionGrilla.x + (distanciaColumnas + Casilla.ancho) * j),
-						(int) alineacionGrilla.y);
-
-			}
-			alineacionGrilla.y -= Casilla.alto + distanciaFilas;
-		}
-
-	}
-
-	public Casilla[][] getCasillas() {
-		return casillas;
 	}
 
 	public void playMusica() {
@@ -133,6 +103,45 @@ public class Mapa {
 				
 			}
 		}
+	}
+	
+	
+	// FUNCIONES PRIVADAS / PROTEGIDAS
+	
+	protected void inicializarObjetos(Imagen fondo, Music musica, Vector2 alineacionGrilla) {
+		this.fondo = fondo;
+		this.musica = musica;
+		this.musica.setLooping(true);
+		this.alineacionGrilla = alineacionGrilla;
+		crearCasillas();
+	}
+	
+	private void detectarCasilla(int i, int j) {
+		casillas[i][j].detectar();
+	}
+
+	private void mostrarCasilla(int i, int j) {
+		casillas[i][j].mostrar();
+	}
+
+	private void crearCasillas() {
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				// se multiplica por "j" porque j es la cantidad de casillas que hay
+				casillas[i][j] = new Casilla(((int) alineacionGrilla.x + (distanciaColumnas + Casilla.ancho) * j),
+						(int) alineacionGrilla.y);
+
+			}
+			alineacionGrilla.y -= Casilla.alto + distanciaFilas;
+		}
+
+	}
+	
+	
+	// GETTERS
+	
+	public Casilla[][] getCasillas() {
+		return casillas;
 	}
 
 	public Imagen getFondo() {

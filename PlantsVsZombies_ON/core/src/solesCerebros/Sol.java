@@ -2,7 +2,7 @@ package solesCerebros;
 
 import com.badlogic.gdx.math.Rectangle;
 
-import recursos.Imagen;
+import utilidades.Imagen;
 
 public class Sol extends SolCerebro {
 

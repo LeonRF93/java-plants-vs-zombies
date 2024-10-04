@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Rectangle;
 
 import plantaYzombie.PlantaZombie;
 import plantas.Planta;
-import recursos.Entradas;
-import recursos.Globales;
-import recursos.Imagen;
-import recursos.Render;
-import recursos.Texto;
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Imagen;
+import utilidades.Render;
+import utilidades.Texto;
 
 public class Hud {
 

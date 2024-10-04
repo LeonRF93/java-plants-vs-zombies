@@ -2,12 +2,12 @@ package zombies;
 
 import com.badlogic.gdx.audio.Sound;
 
-import recursos.Render;
+import utilidades.Render;
 
 public class ZombieBasico extends Zombie {
 	
 	public ZombieBasico() {
-		super("Zombie", 50, 100, 0);
+		super("Zombie", 50, 100);
 		
 		super.setRecarga(RECARGA_RAPIDA);
 		super.setImagen("img/zombies/zombie.png", 100, 100);

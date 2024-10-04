@@ -1,6 +1,6 @@
 package personajes;
 
-import recursos.Imagen;
+import utilidades.Imagen;
 
 public class Moya {
 

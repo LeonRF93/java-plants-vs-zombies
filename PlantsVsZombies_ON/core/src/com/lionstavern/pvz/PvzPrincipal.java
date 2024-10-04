@@ -5,8 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import pantallas.ScreenManager;
-import recursos.Globales;
-import recursos.Render;
+import utilidades.Globales;
+import utilidades.Render;
 
 public class PvzPrincipal extends Game {
 	

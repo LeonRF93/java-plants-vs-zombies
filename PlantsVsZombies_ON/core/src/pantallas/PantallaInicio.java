@@ -5,9 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.lionstavern.pvz.PvzPrincipal;
 
-import recursos.Entradas;
-import recursos.Imagen;
-import recursos.Render;
+import utilidades.Entradas;
+import utilidades.Imagen;
+import utilidades.Render;
 
 public class PantallaInicio implements Screen {
 	

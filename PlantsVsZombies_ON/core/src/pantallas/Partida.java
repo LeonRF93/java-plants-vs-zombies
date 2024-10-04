@@ -7,21 +7,21 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.lionstavern.pvz.PvzPrincipal;
 
 import hud.Hud;
-import mapas.Mapa;
+import jardines.Dia;
+import jardines.Jardin;
 import plantaYzombie.PlantaZombie;
 import plantas.Girasol;
 import plantas.Lanzaguisantes;
 import plantas.Nuez;
-import recursos.Entradas;
-import recursos.Globales;
-import recursos.Imagen;
-import recursos.Render;
-import recursos.Texto;
 import solesCerebros.Sol;
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Imagen;
+import utilidades.Render;
+import utilidades.Texto;
 import zombies.ZombieBasico;
 
 public class Partida implements Screen {
@@ -30,20 +30,19 @@ public class Partida implements Screen {
 	private ScreenManager screenMg;
 
 	// Audio
-	public Music selector;
+	public Music selector = Gdx.audio.newMusic(Gdx.files.internal("audio/Choose-Your-Seeds.mp3"));
 	private Sound pausa = Gdx.audio.newSound(Gdx.files.internal("audio/pause.mp3"));;
 	private boolean unaVezPausa;
 	private Sound bleep = Gdx.audio.newSound(Gdx.files.internal("audio/bleep.mp3"));
 
-	// Plantas y casillas
-	private int casillasX = 230, casillasY = 380;
-
+	// Plantas y zombies del jugador
 	private PlantaZombie[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol(), new ZombieBasico() };
 //	private Planta[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol() };
 //	private Zombie[] plantas = { new ZombieBasico() };
-	
+
 	// Camara
 
+	private boolean camaraAlInicio = false; // cambiar valor para tener o no la animacion inicial
 	private OrthographicCamera camara;
 
 	// Animacion de la camara inicial
@@ -58,8 +57,6 @@ public class Partida implements Screen {
 	private float xCamara = Render.ANCHO / 2, yCamara = Render.ALTO / 2;
 
 	// Pausa
-
-	public static boolean pausaActiva;
 	private Imagen pausaImg;
 	private Imagen menuBoton;
 	private Rectangle areaMenuBoton;
@@ -67,16 +64,12 @@ public class Partida implements Screen {
 	private Rectangle[] areaBotonPuasa = new Rectangle[4];
 	private boolean[] sfxMusic = new boolean[2];
 	private boolean[] unaVezBotones = new boolean[4];
-	
+
 	private boolean unaVezClickIzquierdo;
 
 	// Otros
 
 	private Hud hud;
-	private Texto fuente;
-
-	private Mapa dia;
-
 	private Sol sol;
 
 	public Partida(PvzPrincipal principal) {
@@ -88,54 +81,23 @@ public class Partida implements Screen {
 	public void show() {
 
 		Gdx.input.setInputProcessor(new Entradas());
-		
+
 		Hud.cantSoles = 5000;
+		Globales.jardin = new Dia();
 		
-		// La imagen del fondo toma el ANCHO y el ALTO del Render.
-		// Le sumamos 300 al ANCHO para ajustar la imagen y que no se vea estirada
-		Imagen imgDia = new Imagen("img/escenarios/dia.png", Render.ANCHO + 300, Render.ALTO);
-
-		Music mscDia = Gdx.audio.newMusic(Gdx.files.internal("audio/Day-Stage_.mp3"));
-		int filas = 5, columnas = 9;
-		Vector2 alineacionGrilla = new Vector2(casillasX, casillasY);
-
-		dia = new Mapa("Día", imgDia, mscDia, filas, columnas, alineacionGrilla);
-		Globales.mapa = dia;
 		camara = new OrthographicCamera(Render.ANCHO, Render.ALTO);
 		camara.position.set(Render.ANCHO / 2, Render.ALTO / 2, 0);
 		camaraHud = new OrthographicCamera(Render.ANCHO, Render.ALTO);
 		camaraHud.position.set(Render.ANCHO / 2, Render.ALTO / 2, 0);
 
-		selector = Gdx.audio.newMusic(Gdx.files.internal("audio/Choose-Your-Seeds.mp3"));
-
 		restarVolumen = selector.getVolume();
 		selector.setLooping(true);
 
 		hud = new Hud(plantas);
-
-		fuente = new Texto("fonts/Minecraft.ttf", 80, Color.WHITE, true);
-		fuente.texto = "";
-		fuente.x = 100;
-		fuente.y = 100;
-
 		sol = new Sol();
-
-		pausaImg = new Imagen("img/hud/pausa.png", 406, 348);
-		pausaImg.setPosition(300, 110);
 		
-		menuBoton = new Imagen("img/hud/menu.png", 132, 36);
-		menuBoton.setPosition(Render.ANCHO - 132 - 5 , Render.ALTO - 36);
-		areaMenuBoton = new Rectangle(Render.ANCHO - 132 - 5 , Render.ALTO - 36, 132, 36);
-		
-		botonPausa[0] = new Imagen("img/hud/pausaboton.png", 33, 33);
-		botonPausa[0].setPosition(554, 304);
-		botonPausa[1] = new Imagen("img/hud/pausaboton.png", 33, 33);
-		botonPausa[1].setPosition(554, 275);
+		inicializarPausa();
 
-		areaBotonPuasa[0] = new Rectangle(554, 304, 33, 33);
-		areaBotonPuasa[1] = new Rectangle(554, 275, 33, 33);
-		areaBotonPuasa[2] = new Rectangle(404, 228, 203, 40);
-		areaBotonPuasa[3] = new Rectangle(344, 130, 320, 70);
 	}
 
 	@Override
@@ -145,7 +107,7 @@ public class Partida implements Screen {
 		ajustarVolumen();
 
 		if (!finCamaraInicial) {
-			camaraInicial(false); // cambiar el valor del booleano para que aparezca o no la camara inicial
+			camaraInicial(camaraAlInicio);
 		}
 
 		// Capa del fondo
@@ -153,7 +115,7 @@ public class Partida implements Screen {
 		Render.batch.setProjectionMatrix(camara.combined);
 		Render.batch.begin();
 
-		Globales.mapa.getFondo().dibujar();
+		Globales.jardin.getFondo().dibujar();
 
 		Render.batch.end();
 
@@ -170,15 +132,14 @@ public class Partida implements Screen {
 
 		// Capa de Plantas y soles
 
-
 		Render.batch.setProjectionMatrix(camara.combined);
 
-		Globales.mapa.correr();
+		Globales.jardin.ejecutar();
 		Render.batch.begin();
 
 		sol.dibujar();
 
-		if (!pausaActiva && finCamaraInicial) {
+		if (!Globales.pausaActiva && finCamaraInicial) {
 
 			if (finCamaraInicial) {
 				hud.clickearPlanta();
@@ -201,43 +162,70 @@ public class Partida implements Screen {
 		Render.batch.end();
 
 	}
+	
+
+	// FUNCIONES PARA EL CONSTRUCTOR
+	
+	private void inicializarPausa() {
+		
+		pausaImg = new Imagen("img/hud/pausa.png", 406, 348);
+		pausaImg.setPosition(300, 110);
+
+		menuBoton = new Imagen("img/hud/menu.png", 132, 36);
+		menuBoton.setPosition(Render.ANCHO - 132 - 5, Render.ALTO - 36);
+		areaMenuBoton = new Rectangle(Render.ANCHO - 132 - 5, Render.ALTO - 36, 132, 36);
+
+		botonPausa[0] = new Imagen("img/hud/pausaboton.png", 33, 33);
+		botonPausa[0].setPosition(554, 304);
+		botonPausa[1] = new Imagen("img/hud/pausaboton.png", 33, 33);
+		botonPausa[1].setPosition(554, 275);
+
+		areaBotonPuasa[0] = new Rectangle(554, 304, 33, 33);
+		areaBotonPuasa[1] = new Rectangle(554, 275, 33, 33);
+		areaBotonPuasa[2] = new Rectangle(404, 228, 203, 40);
+		areaBotonPuasa[3] = new Rectangle(344, 130, 320, 70);
+		
+	}
+	
+	
+	// FUNCIONES PRIVADAS
 
 	private void pausar() {
-		
-		if(areaMenuBoton.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
-			if(clickearUnaVez()) {
-				pausaActiva = !pausaActiva;
+
+		if (areaMenuBoton.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
+			if (clickearUnaVez()) {
+				Globales.pausaActiva = !Globales.pausaActiva;
 //				camaraInicial(true); //cada vez q clickeas se mueve un poco, sirve para testear las camaras
 			}
 		}
 
-		if (pausaActiva) {
+		if (Globales.pausaActiva) {
 			if (!unaVezPausa) {
 				pausa.play(Globales.volumenSfx);
 				if (finCamaraInicial) {
-					Globales.mapa.pausarMusica();
+					Globales.jardin.pausarMusica();
 				}
 				unaVezPausa = true;
 			}
 			menuPausa();
-			Globales.mapa.pausar();
+			Globales.jardin.pausar();
 
 			// boton back to game el cual tendría que ir adentro del menuPausa() pero
 			// creeme, creeme que no queres hacer eso
 			if (areaBotonPuasa[3].contains(Entradas.getMouseX(), Entradas.getMouseY())) {
 				if (Entradas.getBotonMouse() == 0) {
-					pausaActiva = false;
+					Globales.pausaActiva = false;
 				}
 			}
 		} else {
 			if (unaVezPausa) {
 				pausa.play(Globales.volumenSfx);
 				if (finCamaraInicial) {
-					Globales.mapa.playMusica();
+					Globales.jardin.playMusica();
 				}
 				unaVezPausa = false;
 			}
-			Globales.mapa.reanudar();
+			Globales.jardin.reanudar();
 		}
 
 	}
@@ -245,19 +233,19 @@ public class Partida implements Screen {
 	private void menuPausa() {
 		pausaImg.dibujar();
 
-		for (int i = 0; i < areaBotonPuasa.length - 2; i++) { // le restamos 2 xq los ultimos dos botones se  trabajan
+		for (int i = 0; i < areaBotonPuasa.length - 2; i++) { // le restamos 2 xq los ultimos dos botones se trabajan
 																// aparte y asi no tenemos problemas con los arrays
 																// boleanos que no tienen una longitud mayor a 2
 			if (areaBotonPuasa[i].contains(Entradas.getMouseX(), Entradas.getMouseY())) {
 				if (Entradas.getBotonMouse() == 0) {
 					if (!unaVezBotones[i]) {
 						sfxMusic[i] = !sfxMusic[i];
-						
+
 						// boton de activado o desactivado de sonidos
 						if (i == 1) {
 							Globales.sfxOn = !Globales.sfxOn;
 						}
-						
+
 						// boton de activado o desactivado de musica
 						if (i == 0) {
 							Globales.musicaOn = !Globales.musicaOn;
@@ -271,21 +259,21 @@ public class Partida implements Screen {
 			}
 
 		}
-		
-		if(!Globales.musicaOn) {
+
+		if (!Globales.musicaOn) {
 			botonPausa[0].dibujar();
 		}
-		if(!Globales.sfxOn) {
+		if (!Globales.sfxOn) {
 			botonPausa[1].dibujar();
 		}
 
 		// boton main menu
 		if (areaBotonPuasa[2].contains(Entradas.getMouseX(), Entradas.getMouseY())) {
 			if (Entradas.getBotonMouse() == 0) {
-				pausaActiva = false;
+				Globales.pausaActiva = false;
 				screenMg.setMenu();
 				PantallaInicio.musica.play();
-				if(Globales.musicaOn) {
+				if (Globales.musicaOn) {
 					PantallaInicio.musica.setVolume(0f);
 				}
 				screenMg.disposePartida(this);
@@ -298,9 +286,9 @@ public class Partida implements Screen {
 	private void ajustarVolumen() {
 
 		if (Globales.musicaOn) {
-			Globales.mapa.desmutearMusica();
+			Globales.jardin.desmutearMusica();
 		} else {
-			Globales.mapa.mutearMusica();
+			Globales.jardin.mutearMusica();
 			selector.stop();
 		}
 
@@ -316,7 +304,7 @@ public class Partida implements Screen {
 
 		if (!onOff) {
 			if (!unaVezCamaraInicial) {
-				Globales.mapa.playMusica();
+				Globales.jardin.playMusica();
 				finCamaraInicial = true;
 				unaVezCamaraInicial = true;
 			}
@@ -328,7 +316,7 @@ public class Partida implements Screen {
 			unaVezCamaraInicial = true;
 		}
 
-		if (pausaActiva) {
+		if (Globales.pausaActiva) {
 			selector.stop();
 		}
 
@@ -367,12 +355,12 @@ public class Partida implements Screen {
 			tiempoAnimacion++;
 		}
 		if (tiempoAnimacion == 200) {
-			Globales.mapa.playMusica();
+			Globales.jardin.playMusica();
 			finCamaraInicial = true;
 		}
 		return true;
 	}
-	
+
 	// llego tu hora... hermano
 	private boolean clickearUnaVez() {
 		if (Entradas.getBotonMouse() == 0 && !unaVezClickIzquierdo) {
@@ -387,7 +375,7 @@ public class Partida implements Screen {
 		return false;
 	}
 
-	// ----- OVERRIDES ----- //
+	// OVERRIDES NO USADOS
 
 	@Override
 	public void resize(int width, int height) {

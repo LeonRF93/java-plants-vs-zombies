@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-import pantallas.Partida;
-import recursos.Imagen;
-import recursos.Render;
+import utilidades.Globales;
+import utilidades.Imagen;
+import utilidades.Render;
 
 public abstract class PlantaZombie {
 
@@ -17,7 +17,7 @@ public abstract class PlantaZombie {
 	private String nombre;
 	private int coste;
 	private int vida;
-	private int damage;
+	protected int damage;
 
 	// imagenes y animacion
 	private Imagen imagen;
@@ -64,16 +64,34 @@ public abstract class PlantaZombie {
 		sinSolesSuficientes.dibujar();
 	}
 	
-	public void dibujarHitbox(float x, float y, float ancho, float alto) {
+	public void ejecutar() {
+		
+	}
+	
+	public void dibujarHitbox() {
 		contorno.begin(ShapeRenderer.ShapeType.Line);
 
 		contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-		contorno.rect(x, y, ancho, alto);
+		contorno.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
 
 		contorno.end();
 	}
+	
+	public void perderVida(int cantidad) {
+		this.vida -= cantidad;
+		System.out.println(this.nombre+" vida: "+this.vida);
+	}
+	
+	public boolean morir() {
+		if(this.vida <= 0) {
+			return true;
+		}
+		return false;
+		
+	}
 
 	public void animacionIddle() {
+		morir();
 		if (!animacionPausada) {
 			tiempoAnimacion += Gdx.graphics.getDeltaTime(); // Acumula el delta time
 			frameActual = animation.getKeyFrame(tiempoAnimacion, true);
@@ -87,7 +105,7 @@ public abstract class PlantaZombie {
 		if (tiempoRecarga < recarga) {
 			sinSolesSuficientes.setAlpha(0.5f);
 			
-			if(!Partida.pausaActiva) {
+			if(!Globales.pausaActiva) {
 				tiempoRecarga += Render.getDeltaTime();
 	
 				noCargado.setPosition(noCargado.getX(), noCargado.getY() + restaNoCargado);

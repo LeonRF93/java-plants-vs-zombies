@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.lionstavern.pvz.PvzPrincipal;
 
-import recursos.Entradas;
-import recursos.Globales;
-import recursos.Imagen;
-import recursos.Render;
-import recursos.Texto;
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Imagen;
+import utilidades.Render;
+import utilidades.Texto;
 
 public class Menu implements Screen {
 

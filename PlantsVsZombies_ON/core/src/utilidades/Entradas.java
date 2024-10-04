@@ -1,4 +1,4 @@
-package recursos;
+package utilidades;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -17,7 +17,7 @@ public class Entradas implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.SPACE) {
-            Partida.pausaActiva = !Partida.pausaActiva;
+            Globales.pausaActiva = !Globales.pausaActiva;
         }
         return false;
 	}
