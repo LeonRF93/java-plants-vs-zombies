@@ -15,6 +15,8 @@ public abstract class Zombie extends PlantaZombie {
 	// Audio
 	private Sound mordisco = Gdx.audio.newSound(Gdx.files.internal("audio/chompZombi.mp3"));
 	private boolean unaVezMordisco;
+	private Sound traga = Gdx.audio.newSound(Gdx.files.internal("audio/tragar.mp3"));
+	private boolean unaVezTraga;
 
 	// Tiempos
 	public float tiempoCaminar = 0f;
@@ -44,6 +46,8 @@ public abstract class Zombie extends PlantaZombie {
 			if(!detectarPlanta()) {
 				super.animacionIddle();
 				caminar();
+				tragar();
+				
 			unaVezMordisco = false;
 			} else {
 				animacionComer.reproducirAnimacion(super.animationX, super.animationY-5);
@@ -57,8 +61,8 @@ public abstract class Zombie extends PlantaZombie {
 		}
 	}
 	
-	// FUNCIONES PRIVADAS
 	
+	// FUNCIONES PRIVADAS
 	
 	private void caminar() {
 		if (!Globales.pausaActiva) {
@@ -73,15 +77,23 @@ public abstract class Zombie extends PlantaZombie {
 
 	private void comer(int i, int j) {
 		if(!unaVezMordisco) {
-			mordisco.play();
+			mordisco.play(Globales.volumenSfx);
 			unaVezMordisco = true;
 		}
 		
 		tiempoComer += Render.getDeltaTime();
 		if (tiempoComer > 0.5f) {
 			tiempoComer = 0f;
-			mordisco.play();
+			mordisco.play(Globales.volumenSfx);
 			Globales.jardin.getCasillas()[i][j].getPlanta().perderVida(super.damage);
+			this.unaVezTraga = true;
+		}
+	}
+	
+	private void tragar() {
+		if(unaVezTraga) {
+			traga.play(Globales.volumenSfx);
+			unaVezTraga = false;
 		}
 	}
 

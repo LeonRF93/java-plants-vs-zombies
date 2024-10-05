@@ -121,8 +121,7 @@ public class Casilla {
 		this.zombies.get(this.zombies.size() - 1).animationX = this.x - 15;
 		this.zombies.get(this.zombies.size() - 1).animationY = this.y;
 
-		this.zombies.get(this.zombies.size() - 1).setHitbox(this.x + 15, this.y + 10, this.ancho - 40, this.alto - 15);
-
+		this.zombies.get(this.zombies.size() - 1).setHitbox(this.x + 20, this.y + 10, this.ancho - 80, this.alto - 15);
 	}
 
 	private void generarPlanta(PlantaZombie plantaZombieAux) {

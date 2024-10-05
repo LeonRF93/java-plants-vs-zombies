@@ -42,6 +42,7 @@ public abstract class PlantaZombie {
 	protected int RECARGA_MUY_LENTA = 20;
 	protected int RECARGA_LENTA = 15;
 	protected int RECARGA_RAPIDA = 5;
+	protected int RECARGA_PRECOZ = 0; //para testear sirve
 	private float restaNoCargado;
 	
 	//hitbox
@@ -58,28 +59,29 @@ public abstract class PlantaZombie {
 		this.animationY = 0;
 	}
 
-	public void dibujar() {
+	public void dibujarHud() {
 		imagen.dibujar();
 		noCargado.dibujar();
 		sinSolesSuficientes.dibujar();
 	}
 	
-	public void ejecutar() {
-		
-	}
+	public abstract void ejecutar();
 	
 	public void dibujarHitbox() {
-		contorno.begin(ShapeRenderer.ShapeType.Line);
-
-		contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-		contorno.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
-
-		contorno.end();
+		
+		if(this.hitbox != null) {
+			
+			contorno.begin(ShapeRenderer.ShapeType.Line);
+	
+			contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+			contorno.rect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
+	
+			contorno.end();
+		}
 	}
 	
 	public void perderVida(int cantidad) {
 		this.vida -= cantidad;
-		System.out.println(this.nombre+" vida: "+this.vida);
 	}
 	
 	public boolean morir() {

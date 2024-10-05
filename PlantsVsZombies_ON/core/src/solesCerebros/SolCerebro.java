@@ -13,43 +13,64 @@ import utilidades.Utiles;
 
 public class SolCerebro {
 
+	// Datos generales
 	private int VALOR = 25;
 	private int CANTIDAD_MAXIMA = 8000;
-	private float tiempo;
-	private int tiempoCaida = 2;
-	private float duracion = 2;
-	private Imagen imagen;
-	private Rectangle area;
-	private int y = Render.ALTO - 120;
-	private int xRandom;
-	private int yFinal;
+	private float duracion = 7; // el tiempo que tarda en desaparecer
 
-	private Sound sonidoClick;
+	// Audio
+	private Sound sonidoClick = Gdx.audio.newSound(Gdx.files.internal("audio/solCerebro.mp3"));
 	private boolean unaVezSonido = false;
 
-	private boolean activarDesaparicion = false;
+	// Tiempos
+	private float tiempo;
+	private int tiempoEnCaer = 2; // el tiempo que tarda en caer (va a ser random)
+	private final int TIEMPO_MINIMO = 5, TIEMPO_MAXIMO = 10;
 	private float tiempoAnimacion = 0f;
+
+	// Datos de la imagen y hitbox
+	private Imagen imagen;
+	private Rectangle hitbox;
+	private int y = Render.ALTO - 120;
+
+	// Animaciones
+	private boolean activarDesaparicion = false;
 	private float restaAlpha = 1f;
+
+	// Valores de spawneo
+	private int xRandom;
+	private int yFinal;
 
 	public SolCerebro(String rutaImagen) {
 		this.imagen = new Imagen(rutaImagen, 70, 70);
 		this.imagen.setY(y);
 		this.yFinal = Utiles.r.nextInt((Render.ALTO / 2) + 30);
-//		this.xRandom = Utiles.r.nextInt(200, (Render.ANCHO - 100)); NO USAR EL RANDOM ASÍ, XQ ALGUNAS VERSIONES DE JAVA NO SON COMPATIBLES CON ESA FORMA
-		// mejor hacer asi: (max - min) + min
+//		this.xRandom = Utiles.r.nextInt(200, (Render.ANCHO - 100)); NO USAR EL RANDOM ASÍ, XQ ALGUNAS VERSIONES DE 
+//				    												JAVA NO SON COMPATIBLES CON ESA FORMA, 
+//																	mejor hacer asi: (max - min) + min	
 		this.xRandom = Utiles.r.nextInt(((Render.ANCHO - 100) - 200)) + 200;
 		// (max - min) + min
 		this.imagen.setX(xRandom);
 		this.imagen.setAlpha(0f);
 
-		area = new Rectangle(xRandom, y, 70, 70);
-		area.setY(y);
-		sonidoClick = Gdx.audio.newSound(Gdx.files.internal("audio/solCerebro.mp3"));
+		hitbox = new Rectangle(xRandom, y, 70, 70);
+		hitbox.setY(y);
 	}
 
-	public void caer() {
+	public void ejecutar() {
+		caer();
+		clickear();
+	}
 
-		this.area.x = xRandom;
+	public void dibujar() {
+		imagen.dibujar();
+	}
+
+	// FUNCIONES PRIVADAS
+
+	private void caer() {
+
+		this.hitbox.x = xRandom;
 
 		if (this.activarDesaparicion) {
 			animacionDesaparecer();
@@ -57,7 +78,7 @@ public class SolCerebro {
 
 		this.tiempo += Gdx.graphics.getDeltaTime();
 
-		if (this.tiempo > this.tiempoCaida) {
+		if (this.tiempo > this.tiempoEnCaer) {
 			this.activarDesaparicion = false;
 			this.imagen.setAlpha(1f);
 			this.restaAlpha = 1f;
@@ -65,7 +86,7 @@ public class SolCerebro {
 
 			if (this.y > this.yFinal) {
 				this.y -= 2;
-				this.area.y = y;
+				this.hitbox.y = y;
 			} else {
 
 				this.duracion -= Gdx.graphics.getDeltaTime();
@@ -80,35 +101,21 @@ public class SolCerebro {
 		}
 	}
 
-	public void clickear() {
-		if (area.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
+	private void clickear() {
+
+		// si el mouse esta en el sol
+		if (hitbox.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
+			// si hacemos click en el sol
 			if (Entradas.getBotonMouse() == 0) {
+
 				desaparecer();
-				if (!unaVezSonido) {
-					this.sonidoClick.play(Globales.volumenSfx);
-					if (Hud.cantSoles <= CANTIDAD_MAXIMA) {
-						Hud.cantSoles += VALOR;
-					}
-					this.unaVezSonido = true;
-				}
+				hacerClick();
+
 			}
 		}
 	}
 
-	public boolean desaparecer() {
-
-		this.activarDesaparicion = true;
-
-		this.duracion = 2;
-
-		this.tiempo = 0;
-
-		this.yFinal = Utiles.r.nextInt(Render.ALTO / 2);
-
-		return true;
-	}
-
-	public void animacionDesaparecer() {
+	private void animacionDesaparecer() {
 
 		this.tiempoAnimacion += Gdx.graphics.getDeltaTime();
 		if (tiempoAnimacion > 0.01f) {
@@ -118,26 +125,48 @@ public class SolCerebro {
 				this.imagen.setAlpha(restaAlpha);
 				this.tiempoAnimacion = 0;
 			} else {
-//				this.xRandom = Utiles.r.nextInt(200, (Render.ANCHO - 100)); (max - min) + min
-				this.xRandom = Utiles.r.nextInt(((Render.ANCHO - 100) - 400)) + 400;
 				this.imagen.setX(xRandom);
 				this.y = Render.ALTO - 120;
-				this.area.y = y + 300; // le sumamos 100 xq sino la hitbox se puede seguir clickeando por mas que esté
-										// invisible
+				this.hitbox.y = y + 300; // le sumamos 100 xq sino la hitbox se puede seguir clickeando por mas que esté
+											// invisible
 			}
 		}
 	}
 
-	public void dibujar() {
-		imagen.dibujar();
+	private void desaparecer() {
+
+		this.activarDesaparicion = true;
+		this.duracion = 2;
+		this.tiempo = 0;
+
 	}
+
+	private void hacerClick() {
+
+		// reproducir todo una sola vez
+		if (!unaVezSonido) {
+			this.sonidoClick.play(Globales.volumenSfx);
+			if (Hud.cantSoles <= CANTIDAD_MAXIMA) {
+				Hud.cantSoles += VALOR;
+			}
+
+			// reiniciamos los valores del sol
+			this.xRandom = Utiles.r.nextInt(((Render.ANCHO - 100) - 400)) + 400;
+			this.yFinal = Utiles.r.nextInt(Render.ALTO / 2);
+			this.tiempoEnCaer = Utiles.r.nextInt(this.TIEMPO_MAXIMO - this.TIEMPO_MINIMO) + this.TIEMPO_MINIMO;
+			this.unaVezSonido = true;
+		}
+
+	}
+
+	// GETTERS
 
 	public int getValor() {
 		return VALOR;
 	}
 
 	public int getTiempoCaida() {
-		return tiempoCaida;
+		return tiempoEnCaer;
 	}
 
 	public float getDuracion() {
@@ -149,7 +178,12 @@ public class SolCerebro {
 	}
 
 	public Rectangle getArea() {
-		return area;
+		return hitbox;
+	}
+
+	public void dispose() {
+		this.imagen.dispose();
+		this.sonidoClick.dispose();
 	}
 
 }

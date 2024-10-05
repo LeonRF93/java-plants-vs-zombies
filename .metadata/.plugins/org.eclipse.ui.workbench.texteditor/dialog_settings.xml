@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="pausa"/>
+		<item key="selection" value="animationX"/>
 		<list key="findhistory">
-			<item value="pausa"/>
-			<item value="getPlantaZombie"/>
-			<item value="camin"/>
-			<item value="ali"/>
-			<item value="alien"/>
-			<item value="selector"/>
-			<item value="camaraIn"/>
-			<item value="camara"/>
-			<item value="atl"/>
-			<item value="animacionI"/>
-			<item value="animacion"/>
-			<item value="alinea"/>
-			<item value="casillasX"/>
-			<item value="planta"/>
-			<item value="plantasSeleccionadas"/>
+			<item value="animationX"/>
+			<item value="animation"/>
+			<item value="temp"/>
+			<item value="animac"/>
+			<item value="anima"/>
+			<item value="set"/>
+			<item value="setAnima"/>
+			<item value="setAni"/>
+			<item value="setA"/>
+			<item value="idl"/>
+			<item value="id"/>
+			<item value="idd"/>
+			<item value="iddle"/>
+			<item value="setAn"/>
+			<item value="cambiar"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Entradas"/>

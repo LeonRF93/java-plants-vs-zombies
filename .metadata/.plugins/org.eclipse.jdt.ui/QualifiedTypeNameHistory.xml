@@ -13,10 +13,12 @@
     <fullyQualifiedTypeName name="pantallas.Menu"/>
     <fullyQualifiedTypeName name="recursos.EntradasMenu"/>
     <fullyQualifiedTypeName name="recursos.Entradas"/>
-    <fullyQualifiedTypeName name="recursos.Globales"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.GlyphLayout"/>
     <fullyQualifiedTypeName name="javax.swing.plaf.synth.SynthOptionPaneUI"/>
     <fullyQualifiedTypeName name="zombies.Caminable"/>
     <fullyQualifiedTypeName name="recursos.Render"/>
     <fullyQualifiedTypeName name="pantallas.Partida"/>
+    <fullyQualifiedTypeName name="plantas.Planta"/>
+    <fullyQualifiedTypeName name="jardines.Dia"/>
+    <fullyQualifiedTypeName name="recursos.Globales"/>
 </qualifiedTypeNameHistroy>

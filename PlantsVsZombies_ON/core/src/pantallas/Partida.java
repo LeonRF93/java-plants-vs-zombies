@@ -143,8 +143,7 @@ public class Partida implements Screen {
 
 			if (finCamaraInicial) {
 				hud.clickearPlanta();
-				sol.caer();
-				sol.clickear();
+				sol.ejecutar();
 			}
 
 		}
