@@ -7,7 +7,7 @@ public class Girasol extends Planta {
 		
 		super.setRecarga(RECARGA_RAPIDA);
 		super.setImagen("img/plants/sunflower.png", 37, 37);
-		super.setAnimacion("img/plants/sprites_sunflower.png", 10, 0.2f);
+		super.setAnimacionIddle("img/plants/sprites_sunflower.png", 10, 0.2f);
 		super.disponibleAlInicio();
 	}
 	

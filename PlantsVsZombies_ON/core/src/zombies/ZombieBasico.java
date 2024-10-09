@@ -11,7 +11,7 @@ public class ZombieBasico extends Zombie {
 		
 		super.setRecarga(super.RECARGA_PRECOZ);
 		super.setImagen("img/zombies/zombie.png", 100, 100);
-		super.setAnimacion("img/zombies/zombie_sprites.png", 7, 0.2f);
+		super.setAnimacionIddle("img/zombies/zombie_sprites.png", 7, 0.2f);
 		super.disponibleAlInicio(); // lo pongo para q sea mas facil testear nomas
 	}
 	

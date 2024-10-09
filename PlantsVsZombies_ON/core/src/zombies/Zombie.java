@@ -44,7 +44,7 @@ public abstract class Zombie extends PlantaZombie {
 		if(!Globales.pausaActiva) {
 			
 			if(!detectarPlanta()) {
-				super.animacionIddle();
+				super.dibujarAnimaciones(ANIM_IDDLE);
 				caminar();
 				tragar();
 				
@@ -56,8 +56,8 @@ public abstract class Zombie extends PlantaZombie {
 			
 		}else {
 			this.mordisco.pause();
-			super.animacionIddle();
-			super.pausarAnimacionEnFrame(1);
+			super.dibujarAnimaciones(ANIM_IDDLE);
+			super.animaciones.get(ANIM_IDDLE).pausarAnimacionEnFrame(1);
 		}
 	}
 	

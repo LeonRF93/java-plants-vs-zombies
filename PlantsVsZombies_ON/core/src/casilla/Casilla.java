@@ -106,7 +106,7 @@ public class Casilla {
 				this.planta.ejecutar();
 			}
 		}
-
+		
 		if (this.zombies.size() > 0) {
 			for (int i = 0; i < zombies.size(); i++) {
 				this.zombies.get(i).ejecutar();

@@ -1,12 +1,11 @@
 package plantaYzombie;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+import utilidades.Animacion;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
@@ -19,19 +18,15 @@ public abstract class PlantaZombie {
 	private int vida;
 	protected int damage;
 
-	// imagenes y animacion
+	// imagenes
 	private Imagen imagen;
 	private Imagen noCargado;
 	private Imagen sinSolesSuficientes;
 	
-	private Animation<TextureRegion> animation;
-	private TextureRegion frameActual;
-	private TextureRegion[] regions;
-	private float tiempoAnimacion;
-	private Texture textura;
-	public int animationX;
-	public int animationY;
-	private boolean animacionPausada;
+	// animaciones
+	protected ArrayList<Animacion> animaciones = new ArrayList<>();
+	protected int ANIM_IDDLE = 0;
+	public int animationX = 0 , animationY = 0;
 
 	
 	//recarga
@@ -47,7 +42,7 @@ public abstract class PlantaZombie {
 	
 	//hitbox
 	protected Rectangle hitbox;
-	private ShapeRenderer contorno = new ShapeRenderer();;
+	private ShapeRenderer contorno = new ShapeRenderer();
 
 
 	public PlantaZombie(String nombre, int coste, int vida, int damage) {
@@ -55,17 +50,19 @@ public abstract class PlantaZombie {
 		this.coste = coste;
 		this.vida = vida;
 		this.damage = damage;
-		this.animationX = 0;
-		this.animationY = 0;
 	}
 
+	public abstract void ejecutar();
+	
 	public void dibujarHud() {
 		imagen.dibujar();
 		noCargado.dibujar();
 		sinSolesSuficientes.dibujar();
 	}
 	
-	public abstract void ejecutar();
+	public void dibujarAnimaciones(int indice) {
+		this.animaciones.get(indice).reproducirAnimacion(animationX, animationY);
+	}
 	
 	public void dibujarHitbox() {
 		
@@ -90,17 +87,6 @@ public abstract class PlantaZombie {
 		}
 		return false;
 		
-	}
-
-	public void animacionIddle() {
-		morir();
-		if (!animacionPausada) {
-			tiempoAnimacion += Gdx.graphics.getDeltaTime(); // Acumula el delta time
-			frameActual = animation.getKeyFrame(tiempoAnimacion, true);
-		}
-		Render.batch.begin();
-		Render.batch.draw(frameActual, animationX, animationY);
-		Render.batch.end();
 	}
 
 	public boolean reproducirCooldown() {
@@ -132,6 +118,9 @@ public abstract class PlantaZombie {
 			return true;
 		}
 	}
+	
+	
+	// GETTERS
 
 	public int getCoste() {
 		return coste;
@@ -148,6 +137,16 @@ public abstract class PlantaZombie {
 	public Rectangle getHitbox() {
 		return hitbox;
 	}
+	
+	public Animacion getAnimacion(int indice) {
+		return this.animaciones.get(indice);
+	}
+	
+	public int getANIM_IDDLE() {
+		return ANIM_IDDLE;
+	}
+	
+	// SETTERS
 	
 	public void setHitbox(int x, int y, int ancho, int alto) {
 		this.hitbox = new Rectangle(x, y, ancho, alto);
@@ -205,27 +204,8 @@ public abstract class PlantaZombie {
 			}
 	}
 
-	public void setAnimacion(String ruta, int cantidadFrames, float velocidadFrames) {
-		textura = new Texture(ruta);
-		TextureRegion[][] temp = TextureRegion.split(textura, textura.getWidth() / cantidadFrames, textura.getHeight());
-
-		regions = new TextureRegion[cantidadFrames];
-		for (int i = 0; i < regions.length; i++) {
-			regions[i] = temp[0][i];
-		}
-		animation = new Animation<TextureRegion>(velocidadFrames, regions);
-		tiempoAnimacion = 0f;
-	}
-
-	public void pausarAnimacionEnFrame(int frameIndex) {
-		if (frameIndex >= 0 && frameIndex < regions.length) {
-			animacionPausada = true;
-			frameActual = regions[frameIndex];
-		}
-	}
-
-	public void reanudarAnimacion() {
-		animacionPausada = false;
+	public void setAnimacionIddle(String ruta, int cantidadFrames, float velocidadFrames) {
+		this.animaciones.add(new Animacion(ruta, cantidadFrames, velocidadFrames));
 	}
 
 	public void setSize(int ancho, int alto) {
@@ -249,7 +229,11 @@ public abstract class PlantaZombie {
 
 		// Imagenes
 		imagen.dispose();
-		textura.dispose();
+		
+		// Animaciones
+		for (int i = 0; i < this.animaciones.size(); i++) {
+			this.animaciones.get(i).dispose();
+		}
 
 	}
 	

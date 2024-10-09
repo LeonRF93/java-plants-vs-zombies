@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="animationX"/>
+		<item key="selection" value="setAnima"/>
 		<list key="findhistory">
-			<item value="animationX"/>
-			<item value="animation"/>
-			<item value="temp"/>
-			<item value="animac"/>
-			<item value="anima"/>
-			<item value="set"/>
 			<item value="setAnima"/>
-			<item value="setAni"/>
-			<item value="setA"/>
-			<item value="idl"/>
-			<item value="id"/>
-			<item value="idd"/>
-			<item value="iddle"/>
+			<item value="get"/>
 			<item value="setAn"/>
-			<item value="cambiar"/>
+			<item value="pausar"/>
+			<item value="pausa"/>
+			<item value="desapa"/>
+			<item value="xRandom"/>
+			<item value="dispose"/>
+			<item value="xRa"/>
+			<item value="perder"/>
+			<item value="hitbox"/>
+			<item value="setHi"/>
+			<item value="setHit"/>
+			<item value="set"/>
+			<item value="dibujarH"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Entradas"/>

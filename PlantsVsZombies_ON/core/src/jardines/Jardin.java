@@ -66,14 +66,14 @@ public abstract class Jardin {
 				
 				// plantas
 				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().pausarAnimacionEnFrame(1);
+				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).pausarAnimacionEnFrame(1);
 				}
 				
 				// zombies
 				if(casillas[i][j].getZombie().size() > 0) {
 					
 					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
-						casillas[i][j].getZombie().get(k).pausarAnimacionEnFrame(1);
+						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).pausarAnimacionEnFrame(1);
 					}
 
 				}
@@ -89,14 +89,14 @@ public abstract class Jardin {
 				
 				// plantas
 				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().reanudarAnimacion();
+				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).reanudarAnimacion();
 				}
 				
 				// zombies
 				if(casillas[i][j].getZombie().size() > 0) {
 					
 					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
-						casillas[i][j].getZombie().get(k).reanudarAnimacion();
+						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).reanudarAnimacion();
 					}
 
 				}

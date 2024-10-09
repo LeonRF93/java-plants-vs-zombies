@@ -7,7 +7,7 @@ public class Nuez extends Planta {
 	
 		super.setRecarga(RECARGA_LENTA);
 		super.setImagen("img/plants/nut.png", 100, 100);
-		super.setAnimacion("img/plants/sprites_nut.png", 5, 0.2f);
+		super.setAnimacionIddle("img/plants/sprites_nut.png", 5, 0.2f);
 	}
 	
 }

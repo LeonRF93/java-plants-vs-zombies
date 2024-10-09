@@ -41,4 +41,20 @@ public class Animacion {
 		Render.batch.end();
 	}
 	
+	public void pausarAnimacionEnFrame(int frameIndex) {
+		if (frameIndex >= 0 && frameIndex < regions.length) {
+			animacionPausada = true;
+			frameActual = regions[frameIndex];
+		}
+	}
+
+	public void reanudarAnimacion() {
+		animacionPausada = false;
+	}
+
+	
+	public void dispose() {
+		this.textura.dispose();
+	}
+	
 }
