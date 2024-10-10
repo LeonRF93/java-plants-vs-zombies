@@ -21,4 +21,6 @@
     <fullyQualifiedTypeName name="plantas.Planta"/>
     <fullyQualifiedTypeName name="jardines.Dia"/>
     <fullyQualifiedTypeName name="recursos.Globales"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.TextureRegion"/>
+    <fullyQualifiedTypeName name="zombies.Zombie"/>
 </qualifiedTypeNameHistroy>

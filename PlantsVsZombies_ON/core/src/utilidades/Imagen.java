@@ -2,10 +2,11 @@ package utilidades;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class Imagen {
 	
-	private Texture t;
+	public Texture t;
 	public Sprite s;
 	public int x=0, y=0;
 	

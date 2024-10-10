@@ -22,7 +22,20 @@ public class Animacion {
 		TextureRegion[][] temp = TextureRegion.split(textura, textura.getWidth() / cantidadFrames, textura.getHeight());
 
 		this.regions = new TextureRegion[cantidadFrames];
-		for (int i = 0; i < regions.length; i++) {
+		for (int i = 0; i < this.regions.length; i++) {
+			this.regions[i] = temp[0][i];
+		}
+		this.animation = new Animation<TextureRegion>(velocidadFrames, regions);
+		this.tiempoAnimacion = 0f;
+		
+	}
+	
+	public Animacion(TextureRegion textRegion, int cantidadFrames, float velocidadFrames) {
+
+		TextureRegion[][] temp = textRegion.split(textRegion.getRegionWidth() / cantidadFrames, textRegion.getRegionHeight());
+
+		this.regions = new TextureRegion[cantidadFrames];
+		for (int i = 0; i < this.regions.length; i++) {
 			this.regions[i] = temp[0][i];
 		}
 		this.animation = new Animation<TextureRegion>(velocidadFrames, regions);

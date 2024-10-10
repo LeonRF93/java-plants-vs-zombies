@@ -4,14 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.lionstavern.pvz.PvzPrincipal;
 
 import hud.Hud;
 import jardines.Dia;
-import jardines.Jardin;
 import plantaYzombie.PlantaZombie;
 import plantas.Girasol;
 import plantas.Lanzaguisantes;
@@ -21,11 +23,10 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
-import utilidades.Texto;
 import zombies.ZombieBasico;
 
 public class Partida implements Screen {
-
+	
 	private PvzPrincipal principal;
 	private ScreenManager screenMg;
 
@@ -79,7 +80,7 @@ public class Partida implements Screen {
 
 	@Override
 	public void show() {
-
+	
 		Gdx.input.setInputProcessor(new Entradas());
 
 		Hud.cantSoles = 5000;
@@ -133,10 +134,9 @@ public class Partida implements Screen {
 		// Capa de Plantas y soles
 
 		Render.batch.setProjectionMatrix(camara.combined);
-
 		Globales.jardin.ejecutar();
 		Render.batch.begin();
-
+		
 		sol.dibujar();
 
 		if (!Globales.pausaActiva && finCamaraInicial) {

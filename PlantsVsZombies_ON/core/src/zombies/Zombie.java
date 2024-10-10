@@ -2,7 +2,7 @@ package zombies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import plantaYzombie.PlantaZombie;
@@ -26,8 +26,8 @@ public abstract class Zombie extends PlantaZombie {
 	private int[] indicePlanta = new int[2];
 	
 	// Animaciones
-	private Animacion animacionComer = new Animacion("img/zombies/zombie_comiendo.png", 7, 0.15f);
-
+	protected Animacion animacionComer;
+	protected Animacion animacionCaminar;
 
 	public Zombie(String nombre, int coste, int vida, int damage) {
 		super(nombre, coste, vida, damage);
@@ -36,6 +36,7 @@ public abstract class Zombie extends PlantaZombie {
 	
 	public Zombie(String nombre, int coste, int vida) {
 		super(nombre, coste, vida, 20);
+		
 	}
 	
 	@Override
@@ -44,7 +45,9 @@ public abstract class Zombie extends PlantaZombie {
 		if(!Globales.pausaActiva) {
 			
 			if(!detectarPlanta()) {
-				super.dibujarAnimaciones(ANIM_IDDLE);
+//				super.dibujarAnimaciones(ANIM_IDDLE);
+				animacionCaminar.reanudarAnimacion();
+				animacionCaminar.reproducirAnimacion(animationX, animationY);
 				caminar();
 				tragar();
 				
@@ -56,8 +59,10 @@ public abstract class Zombie extends PlantaZombie {
 			
 		}else {
 			this.mordisco.pause();
-			super.dibujarAnimaciones(ANIM_IDDLE);
-			super.animaciones.get(ANIM_IDDLE).pausarAnimacionEnFrame(1);
+//			super.dibujarAnimaciones(ANIM_IDDLE);
+//			super.animaciones.get(ANIM_IDDLE).pausarAnimacionEnFrame(1);
+			animacionCaminar.reproducirAnimacion(animationX, animationY);
+			animacionCaminar.pausarAnimacionEnFrame(1);
 		}
 	}
 	

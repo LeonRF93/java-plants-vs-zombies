@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="setAnima"/>
+		<item key="selection" value="super.dibujarAnimaciones(ANIM_IDDLE)"/>
 		<list key="findhistory">
+			<item value="super.dibujarAnimaciones(ANIM_IDDLE)"/>
+			<item value="super.dibujarAnimaciones"/>
+			<item value="super.dibu"/>
+			<item value="super.diu"/>
+			<item value="eje"/>
+			<item value="dibuj"/>
+			<item value="dibujarAni"/>
+			<item value="textura"/>
+			<item value="setAn"/>
 			<item value="setAnima"/>
 			<item value="get"/>
-			<item value="setAn"/>
 			<item value="pausar"/>
 			<item value="pausa"/>
 			<item value="desapa"/>
 			<item value="xRandom"/>
-			<item value="dispose"/>
-			<item value="xRa"/>
-			<item value="perder"/>
-			<item value="hitbox"/>
-			<item value="setHi"/>
-			<item value="setHit"/>
-			<item value="set"/>
-			<item value="dibujarH"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Entradas"/>
