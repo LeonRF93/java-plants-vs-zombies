@@ -28,6 +28,8 @@ public abstract class Zombie extends PlantaZombie {
 	// Animaciones
 	protected Animacion animacionComer;
 	protected Animacion animacionCaminar;
+	private String[] estados = {"zombie_caminando", "zombie_comiendo"};
+	private int indEstado = 0;
 
 	public Zombie(String nombre, int coste, int vida, int damage) {
 		super(nombre, coste, vida, damage);
@@ -44,17 +46,22 @@ public abstract class Zombie extends PlantaZombie {
 		
 		if(!Globales.pausaActiva) {
 			
+				super.animacionesAtlas.dibujar(estados[indEstado],animationX, animationY);
+
+			
 			if(!detectarPlanta()) {
 //				super.dibujarAnimaciones(ANIM_IDDLE);
 				animacionCaminar.reanudarAnimacion();
-				animacionCaminar.reproducirAnimacion(animationX, animationY);
+				indEstado = 0;
+//				animacionCaminar.reproducirAnimacion(animationX, animationY);
 				caminar();
 				tragar();
 				
 			unaVezMordisco = false;
 			} else {
-				animacionComer.reproducirAnimacion(super.animationX, super.animationY-5);
+//				animacionComer.reproducirAnimacion(super.animationX, super.animationY-5);
 				comer(casillaPlanta[0], casillaPlanta[1]);
+				indEstado = 1;
 			}
 			
 		}else {

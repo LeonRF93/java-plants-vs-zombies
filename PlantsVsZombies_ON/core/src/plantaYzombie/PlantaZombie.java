@@ -2,11 +2,11 @@ package plantaYzombie;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import utilidades.Animacion;
+import utilidades.AnimacionAtlas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
@@ -25,6 +25,9 @@ public abstract class PlantaZombie {
 	private Imagen sinSolesSuficientes;
 	
 	// animaciones
+	protected ArrayList<String> estadoAnimacion;
+	protected AnimacionAtlas animacionesAtlas;
+	
 	protected ArrayList<Animacion> animaciones = new ArrayList<>();
 	protected int ANIM_IDDLE = 0;
 	public int animationX = 0 , animationY = 0;
@@ -51,11 +54,13 @@ public abstract class PlantaZombie {
 		this.coste = coste;
 		this.vida = vida;
 		this.damage = damage;
+		
+		this.estadoAnimacion = new ArrayList<String>();
 	}
 
 	public abstract void ejecutar();
 	
-	public void dibujarHud() {
+	public void dibujarEnHud() {
 		imagen.dibujar();
 		noCargado.dibujar();
 		sinSolesSuficientes.dibujar();

@@ -17,13 +17,12 @@ public class AnimacionAtlas extends Sprite {
     
     private float tiempoEstado;
 
-    public AnimacionAtlas(String atlasRuta, int x, int y, int ancho, int alto) {
+    public AnimacionAtlas(String atlasRuta) {
         
         this.atlas = new TextureAtlas(atlasRuta);
         this.animaciones = new HashMap<>();
         this.tiempoEstado = 0f;
-        
-        this.setBounds(x, y, ancho, alto);
+
     }
     
     // Agrega una animación al mapa con un nombre específico
@@ -43,19 +42,25 @@ public class AnimacionAtlas extends Sprite {
         if (animaciones.containsKey(region)) {
         	this.setSize(ancho, alto);
             this.animacionActual = animaciones.get(region);
-            this.tiempoEstado = 0f; // Reinicia el tiempo de la animación al cambiar
         }
     }
 
     private void update() {
-        if (animacionActual != null) {
             this.tiempoEstado += Render.getDeltaTime();
             setRegion(animacionActual.getKeyFrame(tiempoEstado, true)); // true para que se repita
-        }
     }
     
-    public void dibujar() {
-        update();
-        draw(Render.batch);
+    public void dibujar(String region,int x, int y) {
+    	if (animacionActual != null) {
+    		
+    		this.animacionActual = animaciones.get(region);
+    		
+	        update();
+	        this.setPosition(x, y);
+	        
+			Render.batch.begin();
+	        	this.draw(Render.batch);
+			Render.batch.end();
+    	}
     }
 }

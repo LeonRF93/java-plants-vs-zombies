@@ -156,7 +156,7 @@ public class Partida implements Screen {
 		}
 		
 //		atlasLol.dibujar();
-		zombiLol.dibujar();
+//		zombiLol.dibujar();
 
 		Render.batch.end();
 
