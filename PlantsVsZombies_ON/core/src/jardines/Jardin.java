@@ -60,50 +60,50 @@ public abstract class Jardin {
 		musica.setVolume(1f);
 	}
 	
-	public void pausar() {
-		for (int i = 0; i < casillas.length; i++) {
-			for (int j = 0; j < casillas[i].length; j++) {
-				
-				// plantas
-				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).pausarAnimacionEnFrame(1);
-				}
-				
-				// zombies
-				if(casillas[i][j].getZombie().size() > 0) {
-					
-					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
-						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).pausarAnimacionEnFrame(1);
-					}
-
-				}
-			}
-		}
-
-	}
+//	public void pausar() {
+//		for (int i = 0; i < casillas.length; i++) {
+//			for (int j = 0; j < casillas[i].length; j++) {
+//				
+//				// plantas
+//				if(casillas[i][j].getPlanta() != null) {
+//				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).pausarAnimacionEnFrame(1);
+//				}
+//				
+//				// zombies
+//				if(casillas[i][j].getZombie().size() > 0) {
+//					
+//					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
+//						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).pausarAnimacionEnFrame(1);
+//					}
+//
+//				}
+//			}
+//		}
+//
+//	}
 	
 	
-	public void reanudar() {
-		for (int i = 0; i < casillas.length; i++) {
-			for (int j = 0; j < casillas[i].length; j++) {
-				
-				// plantas
-				if(casillas[i][j].getPlanta() != null) {
-				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).reanudarAnimacion();
-				}
-				
-				// zombies
-				if(casillas[i][j].getZombie().size() > 0) {
-					
-					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
-						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).reanudarAnimacion();
-					}
-
-				}
-				
-			}
-		}
-	}
+//	public void reanudar() {
+//		for (int i = 0; i < casillas.length; i++) {
+//			for (int j = 0; j < casillas[i].length; j++) {
+//				
+//				// plantas
+//				if(casillas[i][j].getPlanta() != null) {
+//				casillas[i][j].getPlanta().getAnimacion(casillas[i][j].getPlanta().getANIM_IDDLE()).reanudarAnimacion();
+//				}
+//				
+//				// zombies
+//				if(casillas[i][j].getZombie().size() > 0) {
+//					
+//					for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
+//						casillas[i][j].getZombie().get(k).getAnimacion(casillas[i][j].getZombie().get(k).getANIM_IDDLE()).reanudarAnimacion();
+//					}
+//
+//				}
+//				
+//			}
+//		}
+//	}
 	
 	
 	// FUNCIONES PRIVADAS / PROTEGIDAS
@@ -121,7 +121,7 @@ public abstract class Jardin {
 	}
 
 	private void mostrarCasilla(int i, int j) {
-		casillas[i][j].mostrar();
+		casillas[i][j].mostrarContorno();
 	}
 
 	private void crearCasillas() {

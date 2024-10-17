@@ -3,6 +3,7 @@ package hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import plantaYzombie.PlantaZombie;
@@ -24,6 +25,7 @@ public class Hud {
 	boolean unaVezClick = true;
 
 	// Semillas
+	private ShapeRenderer contorno = new ShapeRenderer();
 	public int xInicial = 93;
 	public int DISTANCIA_ENTRE_SEEDS = 58;
 	private int anchoSeed = 46 , altoSeed = 65;
@@ -100,9 +102,11 @@ public class Hud {
 		select = Gdx.audio.newSound(Gdx.files.internal("audio/seed.mp3"));
 		deselect = Gdx.audio.newSound(Gdx.files.internal("audio/tap.mp3"));
 		
+//		escaladoViewport();
 	}
 
 	public void mostrarHud() {
+		
 		textoSoles.setColor(Color.BLACK); // le pongo el color negro xq se lo tuve q poner rojo al crearlo xq sino no me
 											// dejaba cambiarlo despues (ni puta idea de xq
 		
@@ -136,6 +140,7 @@ public class Hud {
 			costePlantaZombie[i].x = 105 + DISTANCIA_ENTRE_SEEDS * i;
 		}
 
+//		mostrarContorno();
 	}
 
 	public int clickearPlanta() {
@@ -187,6 +192,31 @@ public class Hud {
 		}
 
 		return indiceClickeado;
+	}
+	
+	public void mostrarContorno() {
+
+//			contorno.begin(ShapeRenderer.ShapeType.Line);
+//
+//			contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+//			
+//			for (int i = 0; i < hitbox.length; i++) {
+//				contorno.rect(hitbox[i].x, hitbox[i].y, hitbox[i].width, hitbox[i].height);
+//			}
+//
+//			contorno.end();
+		
+		
+		contorno.begin(ShapeRenderer.ShapeType.Line);
+
+		contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		
+		for (int i = 0; i < hitbox.length; i++) {
+			contorno.rect(Render.fEscalaX(this.hitbox[i].x), this.hitbox[i].y, Render.fEscalaX(this.hitbox[i].width), this.hitbox[i].height);
+		}
+
+		contorno.end();
+
 	}
 
 	private void delayClick() {
@@ -256,6 +286,22 @@ public class Hud {
 
 		textoSoles.texto = String.valueOf(cantSoles);
 	}
+	
+	private void escaladoViewport() {
+//		System.out.println("x: "+this.hitbox[0].x);
+//		System.out.println("y: "+this.hitbox[0].y);
+//		System.out.println("ancho: "+this.hitbox[0].width);
+//		System.out.println("alto "+this.hitbox[0].height+"\n");
+		for (int i = 0; i < hitbox.length; i++) {
+			this.hitbox[i].width = Render.fEscalaX(this.hitbox[i].width);  
+//			this.hitbox[i].height = Render.fEscalaY(this.hitbox[i].height);  
+			this.hitbox[i].x = Render.fEscalaX(this.hitbox[i].x);  
+//			this.hitbox[i].y = Render.fEscalaY(this.hitbox[i].y);  
+		}
+
+	}
+	
+	// DISPOSE
 	
 	public void dispose() {
 

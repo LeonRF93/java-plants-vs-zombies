@@ -14,6 +14,7 @@ import plantaYzombie.PlantasZombies;
 import plantas.Planta;
 import utilidades.Entradas;
 import utilidades.Globales;
+import utilidades.Render;
 import zombies.Caminable;
 import zombies.Zombie;
 
@@ -28,7 +29,7 @@ public class Casilla {
 
 	// Dimensiones de la casilla
 	private Rectangle casilla;
-	private ShapeRenderer contorno = new ShapeRenderer();;
+	private ShapeRenderer contorno = new ShapeRenderer();
 	private int x, y;
 	public static int ancho = 70, alto = 80;
 	private boolean mostrar = false; // cambiar el valor del boleano para mostrar o no el contorno de las casillas
@@ -42,6 +43,8 @@ public class Casilla {
 	}
 
 	public void detectar() {
+		
+		escaladoViewports();
 
 		accionesPlantaZombie();
 
@@ -80,7 +83,7 @@ public class Casilla {
 		}
 	}
 
-	public void mostrar() {
+	public void mostrarContorno() {
 		if (mostrar) {
 
 			contorno.begin(ShapeRenderer.ShapeType.Line);
@@ -139,6 +142,13 @@ public class Casilla {
 		Hud.cantSoles -= plantaZombieAux.getCoste();
 		Globales.plantaReiniciarCooldown = Hud.nombreClickedo;
 		Hud.indiceClickeado = -1;
+	}
+	
+	private void escaladoViewports() {
+		Render.fEscalaX(this.casilla.width);  
+		Render.fEscalaY(this.casilla.height);  
+		Render.fEscalaX(this.casilla.x);  
+		Render.fEscalaY(this.casilla.y);  
 	}
 
 	// GETTERS

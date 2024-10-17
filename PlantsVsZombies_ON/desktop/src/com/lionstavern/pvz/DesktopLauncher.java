@@ -25,7 +25,14 @@ public class DesktopLauncher {
 
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
+		
 		config.setWindowedMode(Render.ANCHO, Render.ALTO);
+//        config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        
+        Render.ANCHO_MONITOR = config.getDisplayMode().width;
+        Render.ALTO_MONITOR = config.getDisplayMode().height;
+		
+
 		config.setResizable(false);
 		config.setTitle("Plants Vs. Zombies Over the Net");
 		config.setWindowIcon("icons/icon128.png", "icons/icon64.png", "icons/icon32.png", "icons/icon16.png");

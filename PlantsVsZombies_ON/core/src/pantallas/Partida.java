@@ -5,10 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.lionstavern.pvz.PvzPrincipal;
 
@@ -19,10 +15,12 @@ import plantas.Girasol;
 import plantas.Lanzaguisantes;
 import plantas.Nuez;
 import solesCerebros.Sol;
+import utilidades.AtlasLol;
 import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
+import utilidades.ZombiAtlas;
 import zombies.ZombieBasico;
 
 public class Partida implements Screen {
@@ -30,6 +28,10 @@ public class Partida implements Screen {
 	private PvzPrincipal principal;
 	private ScreenManager screenMg;
 
+	// Atlas
+	AtlasLol atlasLol;
+	ZombiAtlas zombiLol;
+	
 	// Audio
 	public Music selector = Gdx.audio.newMusic(Gdx.files.internal("audio/Choose-Your-Seeds.mp3"));
 	private Sound pausa = Gdx.audio.newSound(Gdx.files.internal("audio/pause.mp3"));;
@@ -76,6 +78,9 @@ public class Partida implements Screen {
 	public Partida(PvzPrincipal principal) {
 		this.principal = principal;
 		screenMg = new ScreenManager(principal);
+		
+		// Atlas
+		atlasLol = new AtlasLol();
 	}
 
 	@Override
@@ -97,13 +102,15 @@ public class Partida implements Screen {
 		hud = new Hud(plantas);
 		sol = new Sol();
 		
+		zombiLol = new ZombiAtlas();
+		
 		inicializarPausa();
 
 	}
 
 	@Override
 	public void render(float delta) {
-
+		
 		camara.update();
 		ajustarVolumen();
 
@@ -147,6 +154,9 @@ public class Partida implements Screen {
 			}
 
 		}
+		
+//		atlasLol.dibujar();
+		zombiLol.dibujar();
 
 		Render.batch.end();
 
@@ -207,7 +217,7 @@ public class Partida implements Screen {
 				unaVezPausa = true;
 			}
 			menuPausa();
-			Globales.jardin.pausar();
+//			Globales.jardin.pausar();
 
 			// boton back to game el cual tendría que ir adentro del menuPausa() pero
 			// creeme, creeme que no queres hacer eso
@@ -224,7 +234,7 @@ public class Partida implements Screen {
 				}
 				unaVezPausa = false;
 			}
-			Globales.jardin.reanudar();
+//			Globales.jardin.reanudar();
 		}
 
 	}

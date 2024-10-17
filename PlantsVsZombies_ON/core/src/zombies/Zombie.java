@@ -23,7 +23,7 @@ public abstract class Zombie extends PlantaZombie {
 	private float tiempoComer = 0f;
 	
 	// Otros
-	private int[] indicePlanta = new int[2];
+	private int[] casillaPlanta = new int[2];
 	
 	// Animaciones
 	protected Animacion animacionComer;
@@ -54,7 +54,7 @@ public abstract class Zombie extends PlantaZombie {
 			unaVezMordisco = false;
 			} else {
 				animacionComer.reproducirAnimacion(super.animationX, super.animationY-5);
-				comer(indicePlanta[0], indicePlanta[1]);
+				comer(casillaPlanta[0], casillaPlanta[1]);
 			}
 			
 		}else {
@@ -108,8 +108,8 @@ public abstract class Zombie extends PlantaZombie {
 				if (Globales.jardin.getCasillas()[i][j].getPlanta() != null) {
 
 					if (this.getHitbox().overlaps((Globales.jardin.getCasillas()[i][j].getPlanta().getHitbox()))) {
-						indicePlanta[0] = i;
-						indicePlanta[1] = j;
+						casillaPlanta[0] = i;
+						casillaPlanta[1] = j;
 						return true;
 					}
 				}

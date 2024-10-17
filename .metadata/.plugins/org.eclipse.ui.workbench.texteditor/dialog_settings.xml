@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="super.dibujarAnimaciones(ANIM_IDDLE)"/>
+		<item key="selection" value="setAn"/>
 		<list key="findhistory">
+			<item value="setAn"/>
 			<item value="super.dibujarAnimaciones(ANIM_IDDLE)"/>
 			<item value="super.dibujarAnimaciones"/>
 			<item value="super.dibu"/>
@@ -16,7 +17,6 @@
 			<item value="dibuj"/>
 			<item value="dibujarAni"/>
 			<item value="textura"/>
-			<item value="setAn"/>
 			<item value="setAnima"/>
 			<item value="get"/>
 			<item value="pausar"/>
