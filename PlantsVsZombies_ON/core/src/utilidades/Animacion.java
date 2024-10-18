@@ -54,6 +54,19 @@ public class Animacion {
 		Render.batch.end();
 	}
 	
+	public void reproducirAnimacionEscala(int animationX, int animationY, int escalaX, int escalaY) {
+		
+		if (!this.animacionPausada) {
+			this.tiempoAnimacion += Gdx.graphics.getDeltaTime(); // Acumula el delta time
+			this.frameActual = animation.getKeyFrame(tiempoAnimacion, true);
+		}
+		Render.batch.begin();
+		Render.batch.draw(this.frameActual, animationX, animationY, 
+                this.frameActual.getRegionWidth() * escalaX, 
+                this.frameActual.getRegionHeight() * escalaY);
+		Render.batch.end();
+	}
+	
 	public void pausarAnimacionEnFrame(int frameIndex) {
 		if (frameIndex >= 0 && frameIndex < regions.length) {
 			animacionPausada = true;
@@ -65,6 +78,8 @@ public class Animacion {
 		animacionPausada = false;
 	}
 
+	
+	// DISPOSE
 	
 	public void dispose() {
 		this.textura.dispose();

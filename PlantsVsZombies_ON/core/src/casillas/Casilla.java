@@ -1,4 +1,4 @@
-package casilla;
+package casillas;
 
 import java.util.ArrayList;
 
@@ -43,8 +43,6 @@ public class Casilla {
 	}
 
 	public void detectar() {
-		
-		escaladoViewports();
 
 		accionesPlantaZombie();
 
@@ -142,13 +140,6 @@ public class Casilla {
 		Hud.cantSoles -= plantaZombieAux.getCoste();
 		Globales.plantaReiniciarCooldown = Hud.nombreClickedo;
 		Hud.indiceClickeado = -1;
-	}
-	
-	private void escaladoViewports() {
-		Render.fEscalaX(this.casilla.width);  
-		Render.fEscalaY(this.casilla.height);  
-		Render.fEscalaX(this.casilla.x);  
-		Render.fEscalaY(this.casilla.y);  
 	}
 
 	// GETTERS

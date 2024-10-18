@@ -2,11 +2,12 @@ package plantaYzombie;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 import utilidades.Animacion;
-import utilidades.AnimacionAtlas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
@@ -24,13 +25,11 @@ public abstract class PlantaZombie {
 	private Imagen noCargado;
 	private Imagen sinSolesSuficientes;
 	
-	// animaciones
-	protected ArrayList<String> estadoAnimacion;
-	protected AnimacionAtlas animacionesAtlas;
-	
+	// Animaciones
 	protected ArrayList<Animacion> animaciones = new ArrayList<>();
-	protected int ANIM_IDDLE = 0;
 	public int animationX = 0 , animationY = 0;
+	protected final int ANIM_IDDLE = 0;
+	protected int estado_anim = 0;
 
 	
 	//recarga
@@ -55,19 +54,30 @@ public abstract class PlantaZombie {
 		this.vida = vida;
 		this.damage = damage;
 		
-		this.estadoAnimacion = new ArrayList<String>();
+		// la recarga debe llamarse por metodo porque hay que acceder a constantes de la clase padre
+		// (RECARGA_RAPIDA, RECARGA_LENTA, etc)
 	}
 
 	public abstract void ejecutar();
+	public abstract void logica();
+	public abstract void dibujar();
 	
-	public void dibujarEnHud() {
+	public void dibujarIcono() { // la fotito del hud
 		imagen.dibujar();
 		noCargado.dibujar();
 		sinSolesSuficientes.dibujar();
 	}
 	
-	public void dibujarAnimaciones(int indice) {
-		this.animaciones.get(indice).reproducirAnimacion(animationX, animationY);
+	public void dibujarAnimacion() {
+		this.animaciones.get(this.estado_anim).reproducirAnimacion(animationX, animationY);
+	}
+	
+	public void pausarAnimacion() {
+		this.animaciones.get(this.estado_anim).pausarAnimacionEnFrame(1);
+	}
+	
+	public void reanudarAnimacion() {
+		this.animaciones.get(this.estado_anim).reanudarAnimacion();
 	}
 	
 	public void dibujarHitbox() {
@@ -148,11 +158,12 @@ public abstract class PlantaZombie {
 		return this.animaciones.get(indice);
 	}
 	
-	public int getANIM_IDDLE() {
-		return ANIM_IDDLE;
-	}
 	
-	// SETTERS
+	// SETTERS-AGREGADORES
+	
+	public void agregarAnimacion(TextureRegion textRegion, int cantidadFrames, float velocidadFrames) {
+		this.animaciones.add(new Animacion(textRegion, cantidadFrames, velocidadFrames));
+	}
 	
 	public void setHitbox(int x, int y, int ancho, int alto) {
 		this.hitbox = new Rectangle(x, y, ancho, alto);
@@ -210,10 +221,6 @@ public abstract class PlantaZombie {
 			}
 	}
 
-	public void setAnimacionIddle(String ruta, int cantidadFrames, float velocidadFrames) {
-		this.animaciones.add(new Animacion(ruta, cantidadFrames, velocidadFrames));
-	}
-
 	public void setSize(int ancho, int alto) {
 		imagen.setSize(ancho, alto);
 	}
@@ -231,6 +238,9 @@ public abstract class PlantaZombie {
 		this.esDisponibleAlInicio = true;
 	}
 
+	
+	// DISPOSE
+	
 	public void dispose() {
 
 		// Imagenes

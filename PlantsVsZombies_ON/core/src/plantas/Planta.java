@@ -11,12 +11,25 @@ public abstract class Planta extends PlantaZombie {
 	
 	@Override
 	public void ejecutar() {
+		dibujar();
+	}
+	
+	@Override 
+	public void logica() {
 		
-		super.dibujarAnimaciones(super.ANIM_IDDLE);
+	}
+	
+	@Override
+	public void dibujar() {
 		
-		if(Globales.pausaActiva) {
-			super.animaciones.get(ANIM_IDDLE).pausarAnimacionEnFrame(1);
+		super.dibujarAnimacion();
+		
+		if(!Globales.pausaActiva) {
+			super.reanudarAnimacion();
+		} else {
+			super.pausarAnimacion();
 		}
+		
 	}
 
 }

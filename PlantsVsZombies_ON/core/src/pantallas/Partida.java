@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.lionstavern.pvz.PvzPrincipal;
-
 import hud.Hud;
 import jardines.Dia;
 import plantaYzombie.PlantaZombie;
@@ -15,22 +14,13 @@ import plantas.Girasol;
 import plantas.Lanzaguisantes;
 import plantas.Nuez;
 import solesCerebros.Sol;
-import utilidades.AtlasLol;
 import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
-import utilidades.ZombiAtlas;
 import zombies.ZombieBasico;
 
 public class Partida implements Screen {
-	
-	private PvzPrincipal principal;
-	private ScreenManager screenMg;
-
-	// Atlas
-	AtlasLol atlasLol;
-	ZombiAtlas zombiLol;
 	
 	// Audio
 	public Music selector = Gdx.audio.newMusic(Gdx.files.internal("audio/Choose-Your-Seeds.mp3"));
@@ -71,16 +61,14 @@ public class Partida implements Screen {
 	private boolean unaVezClickIzquierdo;
 
 	// Otros
-
+	private PvzPrincipal principal;
+	private ScreenManager screenMg;
 	private Hud hud;
 	private Sol sol;
 
 	public Partida(PvzPrincipal principal) {
 		this.principal = principal;
 		screenMg = new ScreenManager(principal);
-		
-		// Atlas
-		atlasLol = new AtlasLol();
 	}
 
 	@Override
@@ -101,8 +89,6 @@ public class Partida implements Screen {
 
 		hud = new Hud(plantas);
 		sol = new Sol();
-		
-		zombiLol = new ZombiAtlas();
 		
 		inicializarPausa();
 

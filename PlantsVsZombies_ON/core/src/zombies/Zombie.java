@@ -26,51 +26,56 @@ public abstract class Zombie extends PlantaZombie {
 	private int[] casillaPlanta = new int[2];
 	
 	// Animaciones
-	protected Animacion animacionComer;
-	protected Animacion animacionCaminar;
-	private String[] estados = {"zombie_caminando", "zombie_comiendo"};
-	private int indEstado = 0;
+	protected final int ANIM_CAMINAR = 1, ANIM_COMER = 2;
 
 	public Zombie(String nombre, int coste, int vida, int damage) {
 		super(nombre, coste, vida, damage);
 
 	}
 	
+	// esto es xq muchos, por no decir todos, van a sacar la misma cantidad de vida
 	public Zombie(String nombre, int coste, int vida) {
 		super(nombre, coste, vida, 20);
-		
 	}
 	
 	@Override
 	public void ejecutar() {
-		
+		logica();
+		dibujar();
+	}
+	
+	@Override
+	public void logica() {
+
 		if(!Globales.pausaActiva) {
 			
-				super.animacionesAtlas.dibujar(estados[indEstado],animationX, animationY);
-
-			
 			if(!detectarPlanta()) {
-//				super.dibujarAnimaciones(ANIM_IDDLE);
-				animacionCaminar.reanudarAnimacion();
-				indEstado = 0;
-//				animacionCaminar.reproducirAnimacion(animationX, animationY);
+				super.estado_anim = ANIM_CAMINAR;
 				caminar();
 				tragar();
 				
 			unaVezMordisco = false;
 			} else {
-//				animacionComer.reproducirAnimacion(super.animationX, super.animationY-5);
+				super.estado_anim = ANIM_COMER;
 				comer(casillaPlanta[0], casillaPlanta[1]);
-				indEstado = 1;
 			}
 			
 		}else {
 			this.mordisco.pause();
-//			super.dibujarAnimaciones(ANIM_IDDLE);
-//			super.animaciones.get(ANIM_IDDLE).pausarAnimacionEnFrame(1);
-			animacionCaminar.reproducirAnimacion(animationX, animationY);
-			animacionCaminar.pausarAnimacionEnFrame(1);
 		}
+	}
+	
+	@Override
+	public void dibujar() {
+	
+		super.dibujarAnimacion();
+		
+		if(!Globales.pausaActiva) {
+			super.reanudarAnimacion();
+		} else {
+			super.pausarAnimacion();
+		}
+		
 	}
 	
 	

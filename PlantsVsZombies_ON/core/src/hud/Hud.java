@@ -124,7 +124,7 @@ public class Hud {
 			seed.dibujar();
 			plantasZombies[i].setX(xInicial + 7 + DISTANCIA_ENTRE_SEEDS * i);
 			plantasZombies[i].setNoCargadoYSinSoles(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, 46, 65);
-			plantasZombies[i].dibujarEnHud();
+			plantasZombies[i].dibujarIcono();
 			plantasZombies[i].reproducirCooldown();
 			plantasZombies[i].solesSuficientes(cantSoles);
 			
@@ -179,7 +179,7 @@ public class Hud {
 			if (indiceClickeado != -1) {
 				seleccionadas[indiceClickeado].setX(Entradas.getMouseX() - 20);
 				seleccionadas[indiceClickeado].setY(Entradas.getMouseY() - 10);
-				seleccionadas[indiceClickeado].dibujarEnHud();
+				seleccionadas[indiceClickeado].dibujarIcono();
 
 				// si haces click derecho o clickeas fuera del jardin, la planta/zombie desaparece
 				if (Entradas.getBotonMouse() == 1) {

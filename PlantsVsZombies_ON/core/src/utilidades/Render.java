@@ -12,7 +12,18 @@ public class Render {
 	public static int ALTO = 540;
 	public static int ANCHO_MONITOR;
 	public static int ALTO_MONITOR;
+    
+	// Batch
+	public static SpriteBatch batch;
+
 	
+	public static void limpiarPantalla(float r,  float g, float b, float a) {
+		ScreenUtils.clear(r, g, b, a);
+	}
+	
+	public static float getDeltaTime() {
+		return Gdx.graphics.getDeltaTime();
+	}
 	
 	// Viewports
 	public static int escalaX(int valor) {
@@ -29,17 +40,4 @@ public class Render {
     public static float fEscalaY(float valor) {
         return (float)((Render.ALTO_MONITOR*valor)/Render.ALTO);
     }
-	
-    
-	// Otros
-	public static SpriteBatch batch;
-
-	
-	public static void limpiarPantalla(float r,  float g, float b, float a) {
-		ScreenUtils.clear(r, g, b, a);
-	}
-	
-	public static float getDeltaTime() {
-		return Gdx.graphics.getDeltaTime();
-	}
 }

@@ -23,4 +23,8 @@
     <fullyQualifiedTypeName name="recursos.Globales"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.TextureRegion"/>
     <fullyQualifiedTypeName name="zombies.Zombie"/>
+    <fullyQualifiedTypeName name="utilidades.Render"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.Animation"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.utils.Array"/>
 </qualifiedTypeNameHistroy>
