@@ -9,6 +9,7 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
+import utilidades.Rutas;
 import utilidades.Utiles;
 
 public class SolCerebro {
@@ -19,7 +20,7 @@ public class SolCerebro {
 	private float duracion = 7; // el tiempo que tarda en desaparecer
 
 	// Audio
-	private Sound sonidoClick = Gdx.audio.newSound(Gdx.files.internal("audio/solCerebro.mp3"));
+	private Sound sonidoClick = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_SUN));
 	private boolean unaVezSonido = false;
 
 	// Tiempos

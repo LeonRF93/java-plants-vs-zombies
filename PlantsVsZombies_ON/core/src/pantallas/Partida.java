@@ -18,15 +18,16 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
+import utilidades.Rutas;
 import zombies.ZombieBasico;
 
 public class Partida implements Screen {
 	
 	// Audio
-	public Music selector = Gdx.audio.newMusic(Gdx.files.internal("audio/Choose-Your-Seeds.mp3"));
-	private Sound pausa = Gdx.audio.newSound(Gdx.files.internal("audio/pause.mp3"));;
+	public Music selector = Gdx.audio.newMusic(Gdx.files.internal(Rutas.MUSICA_SELECTOR));
+	private Sound pausa = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PAUSA));;
 	private boolean unaVezPausa;
-	private Sound bleep = Gdx.audio.newSound(Gdx.files.internal("audio/bleep.mp3"));
+	private Sound bleep = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_CLICK2));
 
 	// Plantas y zombies del jugador
 	private PlantaZombie[] plantas = { new Lanzaguisantes(), new Nuez(), new Girasol(), new ZombieBasico() };

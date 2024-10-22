@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="animacionActual"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
+			<item value="repro"/>
+			<item value="setAni"/>
+			<item value="animacionId"/>
+			<item value="animacion"/>
+			<item value="animacino"/>
+			<item value="setNo"/>
+			<item value="pausa"/>
+			<item value="iddle"/>
+			<item value="animacionIddl"/>
+			<item value="animaciones"/>
+			<item value="animacionCam"/>
 			<item value="animacionActual"/>
 			<item value="actual"/>
 			<item value="animaCion"/>
 			<item value="agre"/>
-			<item value="atlas"/>
-			<item value="partida"/>
-			<item value="update"/>
-			<item value="fondo"/>
-			<item value="imagen"/>
-			<item value="mostrarCon"/>
-			<item value="mostrar"/>
-			<item value="mostarCon"/>
-			<item value="hitbox"/>
-			<item value="hitbox["/>
-			<item value="//&#x09;&#x09;System.out.println(&quot;x: &quot;+this.hitbox[0].x);"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Entradas"/>

@@ -9,13 +9,14 @@ import plantaYzombie.PlantaZombie;
 import utilidades.Animacion;
 import utilidades.Globales;
 import utilidades.Render;
+import utilidades.Rutas;
 
 public abstract class Zombie extends PlantaZombie {
 	
 	// Audio
-	private Sound mordisco = Gdx.audio.newSound(Gdx.files.internal("audio/chompZombi.mp3"));
+	private Sound mordisco = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_MASTICAR));
 	private boolean unaVezMordisco;
-	private Sound traga = Gdx.audio.newSound(Gdx.files.internal("audio/tragar.mp3"));
+	private Sound traga = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_TRAGAR));
 	private boolean unaVezTraga;
 
 	// Tiempos

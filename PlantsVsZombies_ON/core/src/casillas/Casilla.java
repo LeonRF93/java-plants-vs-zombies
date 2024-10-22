@@ -15,13 +15,14 @@ import plantas.Planta;
 import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Render;
+import utilidades.Rutas;
 import zombies.Caminable;
 import zombies.Zombie;
 
 public class Casilla {
 
 	// Audio
-	private Sound plantar = Gdx.audio.newSound(Gdx.files.internal("audio/plant.mp3"));
+	private Sound plantar = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PLANTAR));
 
 	// Plantas y zombies
 	private PlantaZombie planta = null;

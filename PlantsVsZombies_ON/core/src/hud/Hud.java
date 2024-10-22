@@ -12,15 +12,15 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
 import utilidades.Render;
+import utilidades.Rutas;
 import utilidades.Texto;
 
 public class Hud {
 
 	// Audio
-
-	private Sound select;
-	private Sound deselect;
-	private Sound cancel = Gdx.audio.newSound(Gdx.files.internal("audio/chiwawa.mp3"));
+	private Sound select = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_CLICK_SEED));
+	private Sound deselect = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_CLICK));
+	private Sound cancel = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_CHIWAWA));
 
 	boolean unaVezClick = true;
 
@@ -68,17 +68,17 @@ public class Hud {
 	
 	private void constructor(PlantaZombie[] plantasZombies) {
 		
-		fondo = new Imagen("img/hud/fondo_hud.png", 1202 / 2, 156 / 2);
+		fondo = new Imagen(Rutas.HUD_FONDO, 1202 / 2, 156 / 2);
 		fondo.setPosition(10, Render.ALTO - 77);
 
 		this.plantasZombies = plantasZombies;
 		this.seleccionadas = plantasZombies;
 		hitbox = new Rectangle[plantasZombies.length];
-		seed = new Imagen("img/hud/seed.png", anchoSeed, altoSeed);
+		seed = new Imagen(Rutas.HUD_SEED, anchoSeed, altoSeed);
 
-		sunFrame = new Imagen("img/hud/suncounter.png", 68, 156 / 2);
+		sunFrame = new Imagen(Rutas.HUD_SUN_COUNTER, 68, 156 / 2);
 		sunFrame.setPosition(10, y - 6);
-		textoSoles = new Texto("fonts/Minecraft.ttf", X_ESCALA, Color.RED, false); // lo pongo red xq sino no me deja
+		textoSoles = new Texto(Rutas.FUENTE_MINE, X_ESCALA, Color.RED, false); // lo pongo red xq sino no me deja
 																					// cambiarle el color despues (ni
 																					// puta idea de xq)
 		textoSoles.x = X_UNIDADES;
@@ -98,9 +98,6 @@ public class Hud {
 			costePlantaZombie[i].y = 482;
 			costePlantaZombie[i].texto = String.valueOf(plantasZombies[i].getCoste());
 		}
-
-		select = Gdx.audio.newSound(Gdx.files.internal("audio/seed.mp3"));
-		deselect = Gdx.audio.newSound(Gdx.files.internal("audio/tap.mp3"));
 		
 //		escaladoViewport();
 	}
@@ -321,13 +318,13 @@ public class Hud {
 		}
 
 		// Otros
-		for (int i = 0; i < plantasZombies.length; i++) {
-			plantasZombies[i].dispose();
-		}
-
-		for (int i = 0; i < seleccionadas.length; i++) {
-			seleccionadas[i].dispose();
-		}
+//		for (int i = 0; i < plantasZombies.length; i++) {
+//			plantasZombies[i].dispose();
+//		}
+//
+//		for (int i = 0; i < seleccionadas.length; i++) {
+//			seleccionadas[i].dispose();
+//		}
 
 	}
 }

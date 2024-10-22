@@ -3,11 +3,12 @@ package solesCerebros;
 import com.badlogic.gdx.math.Rectangle;
 
 import utilidades.Imagen;
+import utilidades.Rutas;
 
 public class Sol extends SolCerebro {
 
 	public Sol() {
-		super("img/suns_brains/sun.png");
+		super(Rutas.HUD_SUN);
 	}
 	
 }
