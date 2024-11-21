@@ -17,11 +17,14 @@ public class SolCerebro {
 	// Datos generales
 	private int VALOR = 25;
 	private int CANTIDAD_MAXIMA = 8000;
-	private float duracion = 7; // el tiempo que tarda en desaparecer
+	private float VALOR_DURACION = 7;
+	private float duracion = VALOR_DURACION; // el tiempo que tarda en desaparecer
 
 	// Audio
 	private Sound sonidoClick = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_SUN));
-	private boolean unaVezSonido = false;
+	private Sound sonidoThrow = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFZ_THROW));
+	private boolean unaVezClick = false;
+	private boolean unaVezThrow = false;
 
 	// Tiempos
 	private float tiempo;
@@ -67,14 +70,50 @@ public class SolCerebro {
 		imagen.dibujar();
 	}
 
+	public void generarSol(int xCasilla, int yCasilla) { // para el girasol y el generador de cerebros
+		
+		clickear();
+		imagen.setPosition(xCasilla, yCasilla);
+		
+		if (this.activarDesaparicion) {
+			animacionDesaparecer(false);
+		}
+
+		this.tiempo += Gdx.graphics.getDeltaTime();
+
+		if (this.tiempo > this.tiempoEnCaer) {
+			
+			if(!unaVezThrow) {
+				sonidoThrow.play();
+				unaVezThrow = true;
+			}
+			
+			this.hitbox.x = xCasilla;
+			this.hitbox.y = yCasilla;
+			
+			this.activarDesaparicion = false;
+			this.imagen.setAlpha(1f);
+			this.restaAlpha = 1f;
+			this.unaVezClick = false;
+
+			this.duracion -= Gdx.graphics.getDeltaTime();
+
+			if (this.duracion < 0) {
+				desaparecer();
+			}
+
+		}
+		
+	}
+	
 	// FUNCIONES PRIVADAS
 
-	private void caer() {
+	protected void caer() {
 
 		this.hitbox.x = xRandom;
 
 		if (this.activarDesaparicion) {
-			animacionDesaparecer();
+			animacionDesaparecer(true);
 		}
 
 		this.tiempo += Gdx.graphics.getDeltaTime();
@@ -83,7 +122,7 @@ public class SolCerebro {
 			this.activarDesaparicion = false;
 			this.imagen.setAlpha(1f);
 			this.restaAlpha = 1f;
-			this.unaVezSonido = false;
+			this.unaVezClick = false;
 
 			if (this.y > this.yFinal) {
 				this.y -= 2;
@@ -116,7 +155,7 @@ public class SolCerebro {
 		}
 	}
 
-	private void animacionDesaparecer() {
+	private void animacionDesaparecer(boolean randomizar) {
 
 		this.tiempoAnimacion += Gdx.graphics.getDeltaTime();
 		if (tiempoAnimacion > 0.01f) {
@@ -126,9 +165,9 @@ public class SolCerebro {
 				this.imagen.setAlpha(restaAlpha);
 				this.tiempoAnimacion = 0;
 			} else {
-				this.imagen.setX(xRandom);
+				if(randomizar)this.imagen.setX(xRandom);
 				this.y = Render.ALTO - 120;
-				this.hitbox.y = y + 300; // le sumamos 100 xq sino la hitbox se puede seguir clickeando por mas que esté
+				this.hitbox.y = y + 3000; // le sumamos 100 xq sino la hitbox se puede seguir clickeando por mas que esté
 											// invisible
 			}
 		}
@@ -137,7 +176,7 @@ public class SolCerebro {
 	private void desaparecer() {
 
 		this.activarDesaparicion = true;
-		this.duracion = 2;
+		this.duracion = VALOR_DURACION;
 		this.tiempo = 0;
 
 	}
@@ -145,7 +184,7 @@ public class SolCerebro {
 	private void hacerClick() {
 
 		// reproducir todo una sola vez
-		if (!unaVezSonido) {
+		if (!unaVezClick) {
 			this.sonidoClick.play(Globales.volumenSfx);
 			if (Hud.cantSoles <= CANTIDAD_MAXIMA) {
 				Hud.cantSoles += VALOR;
@@ -155,7 +194,8 @@ public class SolCerebro {
 			this.xRandom = Utiles.r.nextInt(((Render.ANCHO - 100) - 400)) + 400;
 			this.yFinal = Utiles.r.nextInt(Render.ALTO / 2);
 			this.tiempoEnCaer = Utiles.r.nextInt(this.TIEMPO_MAXIMO - this.TIEMPO_MINIMO) + this.TIEMPO_MINIMO;
-			this.unaVezSonido = true;
+			this.unaVezClick = true;
+			this.unaVezThrow = false;
 		}
 
 	}

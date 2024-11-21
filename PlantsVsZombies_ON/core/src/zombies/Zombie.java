@@ -40,12 +40,6 @@ public abstract class Zombie extends PlantaZombie {
 	}
 	
 	@Override
-	public void ejecutar() {
-		logica();
-		dibujar();
-	}
-	
-	@Override
 	public void logica() {
 
 		if(!Globales.pausaActiva) {

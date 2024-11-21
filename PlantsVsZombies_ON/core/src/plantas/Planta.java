@@ -9,11 +9,6 @@ public abstract class Planta extends PlantaZombie {
 		super(nombre, coste, vida, damage);
 	}
 	
-	@Override
-	public void ejecutar() {
-		dibujar();
-	}
-	
 	@Override 
 	public void logica() {
 		

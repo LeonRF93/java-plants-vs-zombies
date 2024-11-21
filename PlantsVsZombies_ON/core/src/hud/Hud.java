@@ -54,7 +54,7 @@ public class Hud {
 	private int X_ESCALA = 20, X_ESCALA_MILLARES = 15;
 	private boolean unaVezMillares, unaVezNoMillares;
 
-	// animacion del "chiwawawa!
+	// animacion del "chiwawawa"
 	private boolean chiwawawaOn;
 	private float tiempoCambioColor = 0f;
 	private float tiempoAnimacionChiwawa = 0f;
@@ -65,6 +65,28 @@ public class Hud {
 		constructor(plantasZombies);
 		
 	}
+	
+	public void ejecutar() {
+		logica();
+		dibujar();
+	}
+	
+	public void logica() {
+		
+		clickearPlanta();
+		recargarPlanta();
+		funcionesTextoSoles();
+		
+	}
+	
+	public void dibujar() {
+		
+		mostrarHud();
+		textoSoles.dibujar();
+	}
+
+	
+	// FUNCIONES PRIVADAS
 	
 	private void constructor(PlantaZombie[] plantasZombies) {
 		
@@ -99,19 +121,13 @@ public class Hud {
 			costePlantaZombie[i].texto = String.valueOf(plantasZombies[i].getCoste());
 		}
 		
-//		escaladoViewport();
 	}
-
-	public void mostrarHud() {
-		
-		textoSoles.setColor(Color.BLACK); // le pongo el color negro xq se lo tuve q poner rojo al crearlo xq sino no me
-											// dejaba cambiarlo despues (ni puta idea de xq
+	
+	private void mostrarHud() {
 		
 		animacionChiwawa();
 		fondo.dibujar();
 		sunFrame.dibujar();
-		funcionesTextoSoles();
-
 
 		for (int i = 0; i < plantasZombies.length; i++) {
 			seed.setY(y);
@@ -122,13 +138,6 @@ public class Hud {
 			plantasZombies[i].setX(xInicial + 7 + DISTANCIA_ENTRE_SEEDS * i);
 			plantasZombies[i].setNoCargadoYSinSoles(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, 46, 65);
 			plantasZombies[i].dibujarIcono();
-			plantasZombies[i].reproducirCooldown();
-			plantasZombies[i].solesSuficientes(cantSoles);
-			
-			if(plantasZombies[i].getNombre() == Globales.plantaReiniciarCooldown) {
-				plantasZombies[i].reiniciarCooldown();
-				Globales.plantaReiniciarCooldown = "";
-			}
 
 		}
 
@@ -136,11 +145,9 @@ public class Hud {
 			costePlantaZombie[i].dibujar();
 			costePlantaZombie[i].x = 105 + DISTANCIA_ENTRE_SEEDS * i;
 		}
-
-//		mostrarContorno();
 	}
 
-	public int clickearPlanta() {
+	private int clickearPlanta() {
 
 		if (clickeado) { // esto es para evitar que, si tenemos el mouse cerca de una casilla, la planta/zombie
 							// se plante ni bien la elegimos
@@ -191,31 +198,21 @@ public class Hud {
 		return indiceClickeado;
 	}
 	
-	public void mostrarContorno() {
-
-//			contorno.begin(ShapeRenderer.ShapeType.Line);
-//
-//			contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-//			
-//			for (int i = 0; i < hitbox.length; i++) {
-//				contorno.rect(hitbox[i].x, hitbox[i].y, hitbox[i].width, hitbox[i].height);
-//			}
-//
-//			contorno.end();
+	private void recargarPlanta() {
+	
+	for (int i = 0; i < plantasZombies.length; i++) {
 		
+		plantasZombies[i].reproducirCooldown();
+		plantasZombies[i].solesSuficientes(cantSoles);
 		
-		contorno.begin(ShapeRenderer.ShapeType.Line);
-
-		contorno.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-		
-		for (int i = 0; i < hitbox.length; i++) {
-			contorno.rect(Render.fEscalaX(this.hitbox[i].x), this.hitbox[i].y, Render.fEscalaX(this.hitbox[i].width), this.hitbox[i].height);
+		if(plantasZombies[i].getNombre() == Globales.plantaReiniciarCooldown) {
+			plantasZombies[i].reiniciarCooldown();
+			Globales.plantaReiniciarCooldown = "";
 		}
-
-		contorno.end();
-
+	}	
+		
 	}
-
+	
 	private void delayClick() {
 		delay += Render.getDeltaTime();
 
@@ -253,8 +250,10 @@ public class Hud {
 	}
 
 	private void funcionesTextoSoles() {
-		textoSoles.dibujar();
 
+		textoSoles.setColor(Color.BLACK); // le pongo el color negro xq se lo tuve q poner rojo al crearlo xq sino no me
+		// dejaba cambiarlo despues (ni puta idea de xq)
+		
 		if (cantSoles < 10) {
 			textoSoles.x = X_UNIDADES;
 		}
@@ -284,19 +283,6 @@ public class Hud {
 		textoSoles.texto = String.valueOf(cantSoles);
 	}
 	
-	private void escaladoViewport() {
-//		System.out.println("x: "+this.hitbox[0].x);
-//		System.out.println("y: "+this.hitbox[0].y);
-//		System.out.println("ancho: "+this.hitbox[0].width);
-//		System.out.println("alto "+this.hitbox[0].height+"\n");
-		for (int i = 0; i < hitbox.length; i++) {
-			this.hitbox[i].width = Render.fEscalaX(this.hitbox[i].width);  
-//			this.hitbox[i].height = Render.fEscalaY(this.hitbox[i].height);  
-			this.hitbox[i].x = Render.fEscalaX(this.hitbox[i].x);  
-//			this.hitbox[i].y = Render.fEscalaY(this.hitbox[i].y);  
-		}
-
-	}
 	
 	// DISPOSE
 	
@@ -316,15 +302,6 @@ public class Hud {
 		for (int i = 0; i < costePlantaZombie.length; i++) {
 			costePlantaZombie[i].dispose();
 		}
-
-		// Otros
-//		for (int i = 0; i < plantasZombies.length; i++) {
-//			plantasZombies[i].dispose();
-//		}
-//
-//		for (int i = 0; i < seleccionadas.length; i++) {
-//			seleccionadas[i].dispose();
-//		}
 
 	}
 }

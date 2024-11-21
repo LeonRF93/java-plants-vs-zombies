@@ -7,13 +7,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.lionstavern.pvz.PvzPrincipal;
+
 import hud.Hud;
 import jardines.Dia;
 import plantaYzombie.PlantaZombie;
 import plantas.Girasol;
 import plantas.Lanzaguisantes;
 import plantas.Nuez;
-import solesCerebros.Sol;
+import solesCerebros.SolCerebro;
 import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Imagen;
@@ -65,7 +66,7 @@ public class Partida implements Screen {
 	private PvzPrincipal principal;
 	private ScreenManager screenMg;
 	private Hud hud;
-	private Sol sol;
+	private SolCerebro sol;
 
 	public Partida(PvzPrincipal principal) {
 		this.principal = principal;
@@ -89,7 +90,7 @@ public class Partida implements Screen {
 		selector.setLooping(true);
 
 		hud = new Hud(plantas);
-		sol = new Sol();
+		sol = new SolCerebro(Rutas.HUD_SUN);
 		
 		inicializarPausa();
 
@@ -122,7 +123,7 @@ public class Partida implements Screen {
 		Render.batch.begin();
 
 		menuBoton.dibujar();
-		hud.mostrarHud();
+		hud.ejecutar();
 		Render.batch.end();
 
 		// Capa de Plantas y soles
@@ -136,7 +137,7 @@ public class Partida implements Screen {
 		if (!Globales.pausaActiva && finCamaraInicial) {
 
 			if (finCamaraInicial) {
-				hud.clickearPlanta();
+				hud.logica();
 				sol.ejecutar();
 			}
 

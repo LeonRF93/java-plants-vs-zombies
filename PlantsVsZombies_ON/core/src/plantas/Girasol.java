@@ -2,12 +2,18 @@ package plantas;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import solesCerebros.SolCerebro;
+import utilidades.Render;
 import utilidades.Rutas;
 
 public class Girasol extends Planta {
+		
+	private SolCerebro sol;
 	
-	 private Texture sprites = new Texture(Rutas.GIRASOL_SPRITES);
-	 private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 800, 80);
+	// Texturas
+	private Texture sprites = new Texture(Rutas.GIRASOL_SPRITES);
+	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 800, 80);
 
 	public Girasol() {
 		super("Girasol", 50, 100, 0);
@@ -17,6 +23,24 @@ public class Girasol extends Planta {
 		
 		super.agregarAnimacion(iddleRegion, 10, 0.2f);
 		super.disponibleAlInicio();
+		
+		sol = new SolCerebro(Rutas.HUD_SUN);
+	}
+
+	
+	@Override
+	protected void logicaUnica() {
+		if(sol != null) {
+			sol.generarSol(animationX, animationY);
+		}	
 	}
 	
+	@Override
+	protected void dibujadosUnicos() {
+		Render.batch.begin();
+		sol.dibujar();
+		Render.batch.end();
+	}
+	
+
 }

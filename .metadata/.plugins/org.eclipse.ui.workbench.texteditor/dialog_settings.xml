@@ -6,8 +6,10 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value=""/>
+		<item key="selection" value="bleep"/>
 		<list key="findhistory">
+			<item value="bleep"/>
+			<item value="public static final"/>
 			<item value="repro"/>
 			<item value="setAni"/>
 			<item value="animacionId"/>
@@ -21,10 +23,9 @@
 			<item value="animacionCam"/>
 			<item value="animacionActual"/>
 			<item value="actual"/>
-			<item value="animaCion"/>
-			<item value="agre"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 			<item value="Entradas"/>
 			<item value="EntradasMenu"/>
 		</list>

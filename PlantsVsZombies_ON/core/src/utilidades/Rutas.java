@@ -45,6 +45,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 String SFX_PAUSA = "audio/pause.mp3";
 	 String SFX_CLICK_SEED = "audio/seed.mp3";
 	 String SFX_SUN = "audio/solCerebro.mp3";
+	 String SFZ_THROW = "audio/throw.mp3";
 	 String SFX_PLANTAR = "audio/plant.mp3";
 
 	// ---- ZOMBIES ----

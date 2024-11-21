@@ -38,7 +38,7 @@ public abstract class PlantaZombie {
 	private boolean esDisponibleAlInicio;
 	
 	protected int RECARGA_MUY_LENTA = 20;
-	protected int RECARGA_LENTA = 15;
+	protected int RECARGA_LENTA = 55;
 	protected int RECARGA_RAPIDA = 5;
 	protected int RECARGA_PRECOZ = 0; //para testear sirve
 	private float restaNoCargado;
@@ -58,9 +58,23 @@ public abstract class PlantaZombie {
 		// (RECARGA_RAPIDA, RECARGA_LENTA, etc)
 	}
 
-	public abstract void ejecutar();
+	public void ejecutar() {
+		logica();
+		dibujar();
+		logicaUnica();
+		dibujadosUnicos();
+	}
+	
 	public abstract void logica();
 	public abstract void dibujar();
+	
+	// por si una clase hija tiene funciones y hay que agruparlas a todas sin tener que 
+	// sobreescribir la funcion logica, evitando perder así las funciones que se heredan
+	protected void logicaUnica() {
+		
+	}
+	protected void dibujadosUnicos() {
+	}
 	
 	public void dibujarIcono() { // la fotito del hud
 		imagen.dibujar();
@@ -171,15 +185,12 @@ public abstract class PlantaZombie {
 	
 	protected void setRecarga(int recarga) {
 		this.recarga = recarga;
-		setRestaNoCargado();
-	}
-	
-	protected void setRestaNoCargado() {
+		
 		if(this.recarga == RECARGA_RAPIDA) {
 			this.restaNoCargado = 0.22f;
 		}
 		if(this.recarga == RECARGA_LENTA) {
-			this.restaNoCargado = 0.071f;
+			this.restaNoCargado = 0.020f;
 		}
 		if(this.recarga == RECARGA_MUY_LENTA) {
 			this.restaNoCargado = 0.01f;
