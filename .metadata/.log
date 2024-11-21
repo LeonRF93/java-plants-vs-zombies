@@ -11476,3 +11476,1270 @@ user global configuration and to define the default location to store repositori
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2024-11-21 15:24:11.570 -----------------------------------------------
+eclipse.buildId=4.28.0.20230608-1200
+java.version=17.0.7
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=es_AR
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.jface 2 0 2024-11-21 15:24:19.221
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-11-21 15:24:19.221
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2024-11-21 15:24:24.282
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\leonf'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 4 2024-11-21 16:22:55.422
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package plantas;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Render;
+import utilidades.Rutas;
+
+public class Lanzaguisantes extends Planta {
+
+	// Audio
+	private Sound hit = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PEA));
+	private Sound disparo = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
+	private boolean unaVezDisparo;
+	
+	// Interaccion zombies
+	private Rectangle detectorZombie;
+	private boolean unaVezDetector;
+	private boolean zombieDetectado;
+	private ShapeRenderer contornoDetector = new ShapeRenderer();
+	
+	// Guisante
+	private float tiempoPea = 0f;
+	private float COOLDOWN_PEA = 2f;
+	private final int ANIM_PEA = 1;
+	private Rectangle peaHitbox;
+	private int peaX = 0;
+	private boolean guisanteHit;
+	
+	// Texturas
+	private Texture sprites = new Texture(Rutas.LANZAGUISANTES_SPRITES);
+	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 640, 80);
+	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78, 30);
+
+	public Lanzaguisantes() {
+		super("Lanzaguisantes", 100, 100, 20);
+	
+		super.setRecarga(RECARGA_PRECOZ);
+		super.setImagen(Rutas.LANZAGUISANTES_ICONO, 37, 37);
+
+		super.agregarAnimacion(iddleRegion, 8, 0.2f);
+		super.agregarAnimacion(peaRegion, 3, 0.2f);
+	}
+
+	@Override
+	protected void logicaHerencias() {
+		if(!Globales.pausaActiva) {
+			
+			detectarZombie();
+
+		}
+	}
+	
+	@Override
+	protected void dibujarHerencias() {
+//		dibujarHitboxes();
+		
+		if(this.zombieDetectado) {
+			super.pausarAnimacionEnFrame(ANIM_PEA, 0);
+			super.dibujarAnimacion(this.ANIM_PEA, this.peaX, super.animationY + 42);
+		}
+	}
+	
+	private boolean detectarZombie() {
+		
+		setHitboxes();
+		
+		for (int i = 0; i < Globales.jardin.getCasillas().length; i++) {
+			for (int j = 0; j < Globales.jardin.getCasillas()[i].length; j++) {
+				
+				for (int h = 0; h < Globales.jardin.getCasillas()[i][j].getZombie().size(); h++) {
+					if(this.detectorZombie.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+						this.zombieDetectado = true;
+						
+						
+						//Disparar guisante
+						
+						this.tiempoPea += Render.getDeltaTime();
+						if(this.tiempoPea < this.COOLDOWN_PEA) {
+							this.peaX += 5;
+							this.peaHitbox.x = peaX;
+						}
+						
+
+						
+						if(!this.unaVezDisparo) {
+							this.disparo.play();
+							this.unaVezDisparo = true;
+						}
+						
+						if(this.peaHitbox.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+							this.hit.play();
+							super.animationX + 50
+							this.unaVezDisparo = false;
+						}
+						
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	private void disparar() {
+		
+		if(this.zombieDetectado) {
+			
+			
+			
+		}
+		
+	}
+	
+	private void dibujarHitboxes() {
+		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+
+		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contornoDetector.rect(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+
+		contornoDetector.end();
+		
+//		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+//
+//		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+//		contornoDetector.rect(super.animationX + 50, super.animationY + 42, peaHitbox.getWidth(), peaHitbox.getHeight());
+//
+//		contornoDetector.end();
+	}
+	
+	// GETTERS
+	
+	public Rectangle getDetectorZombie() {
+		return detectorZombie;
+	}
+	
+	// SETTERS
+	
+	public void setHitboxes() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
+		if(!unaVezDetector) {
+			this.detectorZombie = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+			unaVezDetector = true;
+			
+			this.peaHitbox = new Rectangle(super.animationX + 50, super.animationY + 42, 78/3, 30);
+			this.peaX = super.animationX + 50;
+			}
+		}
+	
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:584)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2024-11-21 16:22:55.423
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:584)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2024-11-21 16:22:55.424
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:584)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:201)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:266)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:597)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1148)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:740)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:806)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1325)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:132)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:94)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:91)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:158)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:78)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.jdt.core 4 4 2024-11-21 16:22:55.458
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package plantas;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Render;
+import utilidades.Rutas;
+
+public class Lanzaguisantes extends Planta {
+
+	// Audio
+	private Sound hit = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PEA));
+	private Sound disparo = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
+	private boolean unaVezDisparo;
+	
+	// Interaccion zombies
+	private Rectangle detectorZombie;
+	private boolean unaVezDetector;
+	private boolean zombieDetectado;
+	private ShapeRenderer contornoDetector = new ShapeRenderer();
+	
+	// Guisante
+	private float tiempoPea = 0f;
+	private float COOLDOWN_PEA = 2f;
+	private final int ANIM_PEA = 1;
+	private Rectangle peaHitbox;
+	private int peaX = 0;
+	private boolean guisanteHit;
+	
+	// Texturas
+	private Texture sprites = new Texture(Rutas.LANZAGUISANTES_SPRITES);
+	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 640, 80);
+	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78, 30);
+
+	public Lanzaguisantes() {
+		super("Lanzaguisantes", 100, 100, 20);
+	
+		super.setRecarga(RECARGA_PRECOZ);
+		super.setImagen(Rutas.LANZAGUISANTES_ICONO, 37, 37);
+
+		super.agregarAnimacion(iddleRegion, 8, 0.2f);
+		super.agregarAnimacion(peaRegion, 3, 0.2f);
+	}
+
+	@Override
+	protected void logicaHerencias() {
+		if(!Globales.pausaActiva) {
+			
+			detectarZombie();
+
+		}
+	}
+	
+	@Override
+	protected void dibujarHerencias() {
+//		dibujarHitboxes();
+		
+		if(this.zombieDetectado) {
+			super.pausarAnimacionEnFrame(ANIM_PEA, 0);
+			super.dibujarAnimacion(this.ANIM_PEA, this.peaX, super.animationY + 42);
+		}
+	}
+	
+	private boolean detectarZombie() {
+		
+		setHitboxes();
+		
+		for (int i = 0; i < Globales.jardin.getCasillas().length; i++) {
+			for (int j = 0; j < Globales.jardin.getCasillas()[i].length; j++) {
+				
+				for (int h = 0; h < Globales.jardin.getCasillas()[i][j].getZombie().size(); h++) {
+					if(this.detectorZombie.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+						this.zombieDetectado = true;
+						
+						
+						//Disparar guisante
+						
+						this.tiempoPea += Render.getDeltaTime();
+						if(this.tiempoPea < this.COOLDOWN_PEA) {
+							this.peaX += 5;
+							this.peaHitbox.x = peaX;
+						}
+						
+
+						
+						if(!this.unaVezDisparo) {
+							this.disparo.play();
+							this.unaVezDisparo = true;
+						}
+						
+						if(this.peaHitbox.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+							this.hit.play();
+							super.animationX + 50
+							this.unaVezDisparo = false;
+						}
+						
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	private void disparar() {
+		
+		if(this.zombieDetectado) {
+			
+			
+			
+		}
+		
+	}
+	
+	private void dibujarHitboxes() {
+		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+
+		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contornoDetector.rect(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+
+		contornoDetector.end();
+		
+//		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+//
+//		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+//		contornoDetector.rect(super.animationX + 50, super.animationY + 42, peaHitbox.getWidth(), peaHitbox.getHeight());
+//
+//		contornoDetector.end();
+	}
+	
+	// GETTERS
+	
+	public Rectangle getDetectorZombie() {
+		return detectorZombie;
+	}
+	
+	// SETTERS
+	
+	public void setHitboxes() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
+		if(!unaVezDetector) {
+			this.detectorZombie = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+			unaVezDetector = true;
+			
+			this.peaHitbox = new Rectangle(super.animationX + 50, super.animationY + 42, 78/3, 30);
+			this.peaX = super.animationX + 50;
+			}
+		}
+	
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 2 2024-11-21 16:22:55.459
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.core.manipulation".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 0 2024-11-21 16:22:55.460
+!MESSAGE Error in JDT Core during AST creation
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core 4 4 2024-11-21 16:22:56.176
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package plantas;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Render;
+import utilidades.Rutas;
+
+public class Lanzaguisantes extends Planta {
+
+	// Audio
+	private Sound hit = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PEA));
+	private Sound disparo = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
+	private boolean unaVezDisparo;
+	
+	// Interaccion zombies
+	private Rectangle detectorZombie;
+	private boolean unaVezDetector;
+	private boolean zombieDetectado;
+	private ShapeRenderer contornoDetector = new ShapeRenderer();
+	
+	// Guisante
+	private float tiempoPea = 0f;
+	private float COOLDOWN_PEA = 2f;
+	private final int ANIM_PEA = 1;
+	private Rectangle peaHitbox;
+	private int peaX = 0;
+	private boolean guisanteHit;
+	
+	// Texturas
+	private Texture sprites = new Texture(Rutas.LANZAGUISANTES_SPRITES);
+	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 640, 80);
+	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78, 30);
+
+	public Lanzaguisantes() {
+		super("Lanzaguisantes", 100, 100, 20);
+	
+		super.setRecarga(RECARGA_PRECOZ);
+		super.setImagen(Rutas.LANZAGUISANTES_ICONO, 37, 37);
+
+		super.agregarAnimacion(iddleRegion, 8, 0.2f);
+		super.agregarAnimacion(peaRegion, 3, 0.2f);
+	}
+
+	@Override
+	protected void logicaHerencias() {
+		if(!Globales.pausaActiva) {
+			
+			detectarZombie();
+
+		}
+	}
+	
+	@Override
+	protected void dibujarHerencias() {
+//		dibujarHitboxes();
+		
+		if(this.zombieDetectado) {
+			super.pausarAnimacionEnFrame(ANIM_PEA, 0);
+			super.dibujarAnimacion(this.ANIM_PEA, this.peaX, super.animationY + 42);
+		}
+	}
+	
+	private boolean detectarZombie() {
+		
+		setHitboxes();
+		
+		for (int i = 0; i < Globales.jardin.getCasillas().length; i++) {
+			for (int j = 0; j < Globales.jardin.getCasillas()[i].length; j++) {
+				
+				for (int h = 0; h < Globales.jardin.getCasillas()[i][j].getZombie().size(); h++) {
+					if(this.detectorZombie.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+						this.zombieDetectado = true;
+						
+						
+						//Disparar guisante
+						
+						this.tiempoPea += Render.getDeltaTime();
+						if(this.tiempoPea < this.COOLDOWN_PEA) {
+							this.peaX += 5;
+							this.peaHitbox.x = peaX;
+						}
+						
+
+						
+						if(!this.unaVezDisparo) {
+							this.disparo.play();
+							this.unaVezDisparo = true;
+						}
+						
+						if(this.peaHitbox.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+							this.hit.play();
+							super.animationX + 50
+							this.unaVezDisparo = false;
+						}
+						
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	private void disparar() {
+		
+		if(this.zombieDetectado) {
+			
+			
+			
+		}
+		
+	}
+	
+	private void dibujarHitboxes() {
+		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+
+		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contornoDetector.rect(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+
+		contornoDetector.end();
+		
+//		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+//
+//		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+//		contornoDetector.rect(super.animationX + 50, super.animationY + 42, peaHitbox.getWidth(), peaHitbox.getHeight());
+//
+//		contornoDetector.end();
+	}
+	
+	// GETTERS
+	
+	public Rectangle getDetectorZombie() {
+		return detectorZombie;
+	}
+	
+	// SETTERS
+	
+	public void setHitboxes() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
+		if(!unaVezDetector) {
+			this.detectorZombie = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+			unaVezDetector = true;
+			
+			this.peaHitbox = new Rectangle(super.animationX + 50, super.animationY + 42, 78/3, 30);
+			this.peaX = super.animationX + 50;
+			}
+		}
+	
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 2 2024-11-21 16:22:56.177
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.core.manipulation".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 0 2024-11-21 16:22:56.178
+!MESSAGE Error in JDT Core during AST creation
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core 4 4 2024-11-21 16:22:57.324
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package plantas;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+
+import utilidades.Entradas;
+import utilidades.Globales;
+import utilidades.Render;
+import utilidades.Rutas;
+
+public class Lanzaguisantes extends Planta {
+
+	// Audio
+	private Sound hit = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PEA));
+	private Sound disparo = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
+	private boolean unaVezDisparo;
+	
+	// Interaccion zombies
+	private Rectangle detectorZombie;
+	private boolean unaVezDetector;
+	private boolean zombieDetectado;
+	private ShapeRenderer contornoDetector = new ShapeRenderer();
+	
+	// Guisante
+	private float tiempoPea = 0f;
+	private float COOLDOWN_PEA = 2f;
+	private final int ANIM_PEA = 1;
+	private Rectangle peaHitbox;
+	private int peaX = 0;
+	private boolean guisanteHit;
+	
+	// Texturas
+	private Texture sprites = new Texture(Rutas.LANZAGUISANTES_SPRITES);
+	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 640, 80);
+	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78, 30);
+
+	public Lanzaguisantes() {
+		super("Lanzaguisantes", 100, 100, 20);
+	
+		super.setRecarga(RECARGA_PRECOZ);
+		super.setImagen(Rutas.LANZAGUISANTES_ICONO, 37, 37);
+
+		super.agregarAnimacion(iddleRegion, 8, 0.2f);
+		super.agregarAnimacion(peaRegion, 3, 0.2f);
+	}
+
+	@Override
+	protected void logicaHerencias() {
+		if(!Globales.pausaActiva) {
+			
+			detectarZombie();
+
+		}
+	}
+	
+	@Override
+	protected void dibujarHerencias() {
+//		dibujarHitboxes();
+		
+		if(this.zombieDetectado) {
+			super.pausarAnimacionEnFrame(ANIM_PEA, 0);
+			super.dibujarAnimacion(this.ANIM_PEA, this.peaX, super.animationY + 42);
+		}
+	}
+	
+	private boolean detectarZombie() {
+		
+		setHitboxes();
+		
+		for (int i = 0; i < Globales.jardin.getCasillas().length; i++) {
+			for (int j = 0; j < Globales.jardin.getCasillas()[i].length; j++) {
+				
+				for (int h = 0; h < Globales.jardin.getCasillas()[i][j].getZombie().size(); h++) {
+					if(this.detectorZombie.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+						this.zombieDetectado = true;
+						
+						
+						//Disparar guisante
+						
+						this.tiempoPea += Render.getDeltaTime();
+						if(this.tiempoPea < this.COOLDOWN_PEA) {
+							this.peaX += 5;
+							this.peaHitbox.x = peaX;
+						}
+						
+
+						
+						if(!this.unaVezDisparo) {
+							this.disparo.play();
+							this.unaVezDisparo = true;
+						}
+						
+						if(this.peaHitbox.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
+							this.hit.play();
+							super.animationX + 50
+							this.unaVezDisparo = false;
+						}
+						
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	private void disparar() {
+		
+		if(this.zombieDetectado) {
+			
+			
+			
+		}
+		
+	}
+	
+	private void dibujarHitboxes() {
+		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+
+		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contornoDetector.rect(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+
+		contornoDetector.end();
+		
+//		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+//
+//		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+//		contornoDetector.rect(super.animationX + 50, super.animationY + 42, peaHitbox.getWidth(), peaHitbox.getHeight());
+//
+//		contornoDetector.end();
+	}
+	
+	// GETTERS
+	
+	public Rectangle getDetectorZombie() {
+		return detectorZombie;
+	}
+	
+	// SETTERS
+	
+	public void setHitboxes() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
+		if(!unaVezDetector) {
+			this.detectorZombie = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+			unaVezDetector = true;
+			
+			this.peaHitbox = new Rectangle(super.animationX + 50, super.animationY + 42, 78/3, 30);
+			this.peaX = super.animationX + 50;
+			}
+		}
+	
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 2 2024-11-21 16:22:57.326
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.core.manipulation".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.jdt.core.manipulation 4 0 2024-11-21 16:22:57.326
+!MESSAGE Error in JDT Core during AST creation
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.InfixExpression.setOperator(InfixExpression.java:383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1287)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2047)
+	at org.eclipse.jdt.core.dom.ASTConverter.convertToParenthesizedExpression(ASTConverter.java:3919)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1953)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1204)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1990)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3161)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2286)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3103)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1383)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3079)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:2238)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3100)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:751)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3456)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1534)
+	at org.eclipse.jdt.core.dom.CompilationUnitResolver.convert(CompilationUnitResolver.java:344)
+	at org.eclipse.jdt.core.dom.ASTParser.internalCreateAST(ASTParser.java:1272)
+	at org.eclipse.jdt.core.dom.ASTParser.createAST(ASTParser.java:868)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider$1.run(CoreASTProvider.java:294)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.createAST(CoreASTProvider.java:286)
+	at org.eclipse.jdt.core.manipulation.CoreASTProvider.getAST(CoreASTProvider.java:199)
+	at org.eclipse.jdt.core.manipulation.SharedASTProviderCore.getAST(SharedASTProviderCore.java:138)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup.calculateASTandInform(SelectionListenerWithASTManager.java:166)
+	at org.eclipse.jdt.internal.ui.viewsupport.SelectionListenerWithASTManager$PartListenerGroup$1.run(SelectionListenerWithASTManager.java:151)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

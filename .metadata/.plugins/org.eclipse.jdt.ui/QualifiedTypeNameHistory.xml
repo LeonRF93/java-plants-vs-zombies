@@ -7,7 +7,6 @@
     <fullyQualifiedTypeName name="mapasCasillas.Casilla"/>
     <fullyQualifiedTypeName name="pantallas.PantallaInicio"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType"/>
-    <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="java.lang.StringIndexOutOfBoundsException"/>
     <fullyQualifiedTypeName name="pantallas.Menu"/>
@@ -29,5 +28,7 @@
     <fullyQualifiedTypeName name="zombies.Zombie"/>
     <fullyQualifiedTypeName name="utilidades.Rutas"/>
     <fullyQualifiedTypeName name="utilidades.Globales"/>
+    <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
     <fullyQualifiedTypeName name="utilidades.Render"/>
+    <fullyQualifiedTypeName name="utilidades.Entradas"/>
 </qualifiedTypeNameHistroy>

@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="duracion"/>
+		<item key="selection" value="morir"/>
 		<list key="findhistory">
+			<item value="morir"/>
+			<item value="hitbo"/>
+			<item value="hitbox"/>
+			<item value="hit"/>
+			<item value="hitx"/>
+			<item value="getZ"/>
+			<item value="get"/>
+			<item value="dibujarH"/>
 			<item value="duracion"/>
+			<item value="tiempoEn"/>
+			<item value="tiempo"/>
 			<item value="sol"/>
 			<item value="cant"/>
 			<item value="sol}"/>
 			<item value="sol}+"/>
-			<item value="stat"/>
-			<item value="sta"/>
-			<item value="staic"/>
-			<item value="dibujar"/>
-			<item value="this.im"/>
-			<item value="new Sol"/>
-			<item value="Sol"/>
-			<item value="indiceCli"/>
-			<item value="ind"/>
-			<item value="nombreCl"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

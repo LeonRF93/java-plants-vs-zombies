@@ -22,7 +22,7 @@ public class SolCerebro {
 
 	// Audio
 	private Sound sonidoClick = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_SUN));
-	private Sound sonidoThrow = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFZ_THROW));
+	private Sound sonidoThrow = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
 	private boolean unaVezClick = false;
 	private boolean unaVezThrow = false;
 

@@ -23,7 +23,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	
 	// Lanzaguisantes
 	 String LANZAGUISANTES_ICONO = "img/plants/pea.png";
-	 String LANZAGUISANTES_SPRITES = "img/plants/sprites_pea.png";
+	 String LANZAGUISANTES_SPRITES = "img/plants/sprites_pea2.png";
 	// Girasol
 	 String GIRASOL_ICONO = "img/plants/sunflower.png";
 	 String GIRASOL_SPRITES = "img/plants/sprites_sunflower.png";
@@ -45,8 +45,11 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 String SFX_PAUSA = "audio/pause.mp3";
 	 String SFX_CLICK_SEED = "audio/seed.mp3";
 	 String SFX_SUN = "audio/solCerebro.mp3";
-	 String SFZ_THROW = "audio/throw.mp3";
+	 String SFX_THROW = "audio/throw.mp3";
 	 String SFX_PLANTAR = "audio/plant.mp3";
+	 
+	 // ---- PLANTAS ----
+	 String SFX_PEA = "audio/pea.mp3";
 
 	// ---- ZOMBIES ----
 	 String SFX_MASTICAR = "audio/chompZombi.mp3";

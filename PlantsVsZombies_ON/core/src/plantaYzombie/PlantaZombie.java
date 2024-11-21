@@ -86,8 +86,16 @@ public abstract class PlantaZombie {
 		this.animaciones.get(this.estado_anim).reproducirAnimacion(animationX, animationY);
 	}
 	
+	public void dibujarAnimacion(int indiceAnimacion, int x, int y) {
+		this.animaciones.get(indiceAnimacion).reproducirAnimacion(x, y);
+	}
+	
 	public void pausarAnimacion() {
 		this.animaciones.get(this.estado_anim).pausarAnimacionEnFrame(1);
+	}
+	
+	public void pausarAnimacionEnFrame(int idiceAnimacion, int frame) {
+		this.animaciones.get(idiceAnimacion).pausarAnimacionEnFrame(frame);
 	}
 	
 	public void reanudarAnimacion() {
