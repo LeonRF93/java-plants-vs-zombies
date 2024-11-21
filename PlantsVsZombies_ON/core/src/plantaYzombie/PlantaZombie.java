@@ -61,8 +61,8 @@ public abstract class PlantaZombie {
 	public void ejecutar() {
 		logica();
 		dibujar();
-		logicaUnica();
-		dibujadosUnicos();
+		logicaHerencias();
+		dibujarHerencias();
 	}
 	
 	public abstract void logica();
@@ -70,10 +70,10 @@ public abstract class PlantaZombie {
 	
 	// por si una clase hija tiene funciones y hay que agruparlas a todas sin tener que 
 	// sobreescribir la funcion logica, evitando perder así las funciones que se heredan
-	protected void logicaUnica() {
+	protected void logicaHerencias() {
 		
 	}
-	protected void dibujadosUnicos() {
+	protected void dibujarHerencias() {
 	}
 	
 	public void dibujarIcono() { // la fotito del hud
@@ -254,6 +254,8 @@ public abstract class PlantaZombie {
 	
 	public void dispose() {
 
+		disposeHerencias();
+		
 		// Imagenes
 		imagen.dispose();
 		
@@ -262,6 +264,10 @@ public abstract class PlantaZombie {
 			this.animaciones.get(i).dispose();
 		}
 
+	}
+	
+	public void disposeHerencias() {
+		
 	}
 	
 }

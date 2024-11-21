@@ -9,6 +9,7 @@ import utilidades.Rutas;
 
 public class Girasol extends Planta {
 		
+	// Sol
 	private SolCerebro sol;
 	
 	// Texturas
@@ -24,22 +25,27 @@ public class Girasol extends Planta {
 		super.agregarAnimacion(iddleRegion, 10, 0.2f);
 		super.disponibleAlInicio();
 		
-		sol = new SolCerebro(Rutas.HUD_SUN);
+		this.sol = new SolCerebro(Rutas.HUD_SUN);
 	}
 
 	
 	@Override
-	protected void logicaUnica() {
-		if(sol != null) {
-			sol.generarSol(animationX, animationY);
+	protected void logicaHerencias() {
+		if(this.sol != null) {
+			this.sol.generarSol(this.animationX, this.animationY);
 		}	
 	}
 	
 	@Override
-	protected void dibujadosUnicos() {
+	protected void dibujarHerencias() {
 		Render.batch.begin();
-		sol.dibujar();
+		this.sol.dibujar();
 		Render.batch.end();
+	}
+	
+	@Override
+	public void disposeHerencias() {
+		this.sol.dispose();
 	}
 	
 

@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="bleep"/>
+		<item key="selection" value="duracion"/>
 		<list key="findhistory">
-			<item value="bleep"/>
-			<item value="public static final"/>
-			<item value="repro"/>
-			<item value="setAni"/>
-			<item value="animacionId"/>
-			<item value="animacion"/>
-			<item value="animacino"/>
-			<item value="setNo"/>
-			<item value="pausa"/>
-			<item value="iddle"/>
-			<item value="animacionIddl"/>
-			<item value="animaciones"/>
-			<item value="animacionCam"/>
-			<item value="animacionActual"/>
-			<item value="actual"/>
+			<item value="duracion"/>
+			<item value="sol"/>
+			<item value="cant"/>
+			<item value="sol}"/>
+			<item value="sol}+"/>
+			<item value="stat"/>
+			<item value="sta"/>
+			<item value="staic"/>
+			<item value="dibujar"/>
+			<item value="this.im"/>
+			<item value="new Sol"/>
+			<item value="Sol"/>
+			<item value="indiceCli"/>
+			<item value="ind"/>
+			<item value="nombreCl"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

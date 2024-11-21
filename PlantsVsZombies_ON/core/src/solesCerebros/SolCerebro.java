@@ -28,8 +28,8 @@ public class SolCerebro {
 
 	// Tiempos
 	private float tiempo;
-	private int tiempoEnCaer = 2; // el tiempo que tarda en caer (va a ser random)
-	private final int TIEMPO_MINIMO = 5, TIEMPO_MAXIMO = 10;
+	private int tiempoEnCaer = Utiles.r.nextInt(this.TIEMPO_MAXIMO - this.TIEMPO_MINIMO) + this.TIEMPO_MINIMO; // el tiempo que tarda en caer
+	private final int TIEMPO_MINIMO = 8, TIEMPO_MAXIMO = 15;
 	private float tiempoAnimacion = 0f;
 
 	// Datos de la imagen y hitbox

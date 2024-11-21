@@ -22,11 +22,12 @@
     <fullyQualifiedTypeName name="jardines.Dia"/>
     <fullyQualifiedTypeName name="recursos.Globales"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.TextureRegion"/>
-    <fullyQualifiedTypeName name="utilidades.Render"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.glutils.ShapeRenderer"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.g2d.Animation"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.utils.Array"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
     <fullyQualifiedTypeName name="zombies.Zombie"/>
     <fullyQualifiedTypeName name="utilidades.Rutas"/>
+    <fullyQualifiedTypeName name="utilidades.Globales"/>
+    <fullyQualifiedTypeName name="utilidades.Render"/>
 </qualifiedTypeNameHistroy>
