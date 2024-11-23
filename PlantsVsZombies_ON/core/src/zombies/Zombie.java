@@ -26,17 +26,24 @@ public abstract class Zombie extends PlantaZombie {
 	// Otros
 	private int[] casillaPlanta = new int[2];
 	
+	protected int ANCHO_HITBOX = 10;
+	protected int ALTO_HITBOX = 70;
+	
 	// Animaciones
 	protected final int ANIM_CAMINAR = 1, ANIM_COMER = 2;
 
 	public Zombie(String nombre, int coste, int vida, int damage) {
 		super(nombre, coste, vida, damage);
+		super.ANCHO_HITBOX = 25;
+		super.ALTO_HITBOX = 70;
 
 	}
 	
 	// esto es xq muchos, por no decir todos, van a sacar la misma cantidad de vida
 	public Zombie(String nombre, int coste, int vida) {
 		super(nombre, coste, vida, 20);
+		super.ANCHO_HITBOX = 25;
+		super.ALTO_HITBOX = 70;
 	}
 	
 	@Override
@@ -62,7 +69,6 @@ public abstract class Zombie extends PlantaZombie {
 	
 	@Override
 	public void dibujar() {
-	
 		super.dibujarAnimacion();
 		
 		if(!Globales.pausaActiva) {
@@ -72,6 +78,9 @@ public abstract class Zombie extends PlantaZombie {
 		}
 		
 	}
+	
+	
+
 	
 	
 	// FUNCIONES PRIVADAS

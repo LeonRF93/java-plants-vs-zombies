@@ -84,7 +84,7 @@ public class SolCerebro {
 		if (this.tiempo > this.tiempoEnCaer) {
 			
 			if(!unaVezThrow) {
-				sonidoThrow.play();
+				sonidoThrow.play(Globales.volumenSfx);
 				unaVezThrow = true;
 			}
 			
@@ -178,6 +178,7 @@ public class SolCerebro {
 		this.activarDesaparicion = true;
 		this.duracion = VALOR_DURACION;
 		this.tiempo = 0;
+		this.unaVezThrow = false;
 
 	}
 
@@ -195,7 +196,6 @@ public class SolCerebro {
 			this.yFinal = Utiles.r.nextInt(Render.ALTO / 2);
 			this.tiempoEnCaer = Utiles.r.nextInt(this.TIEMPO_MAXIMO - this.TIEMPO_MINIMO) + this.TIEMPO_MINIMO;
 			this.unaVezClick = true;
-			this.unaVezThrow = false;
 		}
 
 	}

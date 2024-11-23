@@ -1,5 +1,7 @@
 package plantas;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
@@ -18,140 +19,162 @@ public class Lanzaguisantes extends Planta {
 	private Sound hit = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PEA));
 	private Sound disparo = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_THROW));
 	private boolean unaVezDisparo;
-	
+
 	// Interaccion zombies
-	private Rectangle detectorZombie;
-	private boolean unaVezDetector;
+	private Rectangle rangoDeteccion;
+	private boolean unaVezSetRango;
 	private boolean zombieDetectado;
-	private ShapeRenderer contornoDetector = new ShapeRenderer();
-	
+	private ShapeRenderer contornoRango = new ShapeRenderer();
+
 	// Guisante
+	private ArrayList<Guisante> guisantes = new ArrayList<>();
 	private float tiempoPea = 0f;
-	private float COOLDOWN_PEA = 2f;
-	private final int ANIM_PEA = 1;
-	private Rectangle peaHitbox;
-	private int peaX = 0;
-	private boolean activarDisparo;
-	private boolean disparar;
-	
-	// Texturas
+	private float COOLDOWN_PEA = 1.5f;
+
+	// Texturas y animacion
 	private Texture sprites = new Texture(Rutas.LANZAGUISANTES_SPRITES);
 	private TextureRegion iddleRegion = new TextureRegion(sprites, 0, 0, 640, 80);
-	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78, 30);
+	private TextureRegion peaRegion = new TextureRegion(sprites, 0, 80, 78/3, 30);
 
 	public Lanzaguisantes() {
-		super("Lanzaguisantes", 100, 100, 20);
-	
+		super("Lanzaguisantes", 100, 100, 10);
+
 		super.setRecarga(RECARGA_PRECOZ);
 		super.setImagen(Rutas.LANZAGUISANTES_ICONO, 37, 37);
 
 		super.agregarAnimacion(iddleRegion, 8, 0.2f);
-		super.agregarAnimacion(peaRegion, 3, 0.2f);
+//		super.agregarAnimacion(peaRegion, 3, 0.2f);
 	}
 
 	@Override
 	protected void logicaHerencias() {
-		if(!Globales.pausaActiva) {
-			
+		if (!Globales.pausaActiva) {
+
 			detectarZombie();
 
 		}
 	}
-	
+
 	@Override
 	protected void dibujarHerencias() {
-//		dibujarHitboxes();
 		
-		if(this.zombieDetectado) {
-			super.pausarAnimacionEnFrame(ANIM_PEA, 0);
-			super.dibujarAnimacion(this.ANIM_PEA, this.peaX, super.animationY + 42);
-		}
+			if(this.guisantes.size() > 0) {
+				for (int i = 0; i < guisantes.size(); i++) {
+					this.guisantes.get(i).dibujar((int)this.guisantes.get(i).getHitbox().x, (int)this.guisantes.get(i).getHitbox().y);
+				}
+			}
 	}
 	
-	private boolean detectarZombie() {
+	
+	// FUNCIONES PRIVADAS
+
+	private void detectarZombie() {
 		
-		setHitboxes();
-		
+		// no se puede usar un "else" cuando se esta detectando si un zombi entra o sale del rango del lanzaguisantes
+		// por si el arraylist de los zombies vale 0, por lo que hay que hay que todo el tiempo darle un valor falso
+		// al este booleano y que se ponga como verdadero solo cuando detecta un zombie
+		this.zombieDetectado = false;
+	
+		setRango();
+
 		for (int i = 0; i < Globales.jardin.getCasillas().length; i++) {
 			for (int j = 0; j < Globales.jardin.getCasillas()[i].length; j++) {
-				
 				for (int h = 0; h < Globales.jardin.getCasillas()[i][j].getZombie().size(); h++) {
-					if(this.detectorZombie.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
-					
+
+					if (this.rangoDeteccion.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
 						this.zombieDetectado = true;
-						
-						controlarDiparo();
-						
-						if(this.peaHitbox.overlaps(Globales.jardin.getCasillas()[i][j].getZombie().get(h).getHitbox())) {
-							this.hit.play();
-							this.peaX = super.animationX + 50;
-							this.unaVezDisparo = false;
-						}
-						
+						impactarGuisante(i, j, h);
 					}
 				}
-				
+
 			}
 		}
-		return false;
+
+			disparar();
+
+
+	}
+
+	private void disparar() {
+		
+		// hay que tener esto fuera del array xq hay un lio con el tema del tiempo del cooldown
+		if(this.zombieDetectado) {
+			controlarCooldown();
+		}
+
+		for (int i = 0; i < this.guisantes.size(); i++) {
+			if(this.zombieDetectado || this.guisantes.get(i).getHitbox().x <= Globales.ANCHO) {
+				this.guisantes.get(i).getHitbox().x += 5;
+				if(this.guisantes.get(i).getHitbox().x > Globales.ANCHO) {
+					this.guisantes.remove(i);
+				}
+			}
+		}
+
 	}
 	
-	private void controlarDiparo() {
+	private void impactarGuisante(int casillaFila, int casillaColumna, int indiceZombie) {
 		
-		if(this.tiempoPea < this.COOLDOWN_PEA) {
+		if(this.guisantes.size()>0) {
+			for (int i = 0; i < this.guisantes.size(); i++) {
+				if (this.guisantes.get(i).getHitbox().overlaps(Globales.jardin.getCasillas()[casillaFila][casillaColumna]
+						.getZombie().get(indiceZombie).getHitbox())) {
+		
+					Globales.jardin.getCasillas()[casillaFila][casillaColumna].getZombie().get(indiceZombie).perderVida(super.damage);
+					this.hit.play(Globales.volumenSfx);
+					this.guisantes.get(i).getHitbox().y = -5000;
+					this.guisantes.remove(i);
+				}
+	
+			}
+		}
+	}
+	
+	private void controlarCooldown() {
+		
+		if (this.tiempoPea < this.COOLDOWN_PEA) {
 			this.tiempoPea += Render.getDeltaTime();
 		} else {
 			this.tiempoPea = 0f;
-			System.out.println("pum");
-			this.activarDisparo = !this.activarDisparo;
-		}
+			this.guisantes.add(new Guisante(peaRegion, super.animationX + 50, super.animationY + 42));
+			this.disparo.play(Globales.volumenSfx);
 
-		
-		// Mover guisante
-		if(this.activarDisparo) {
-			this.peaX += 5;
-			this.peaHitbox.x = peaX;
 		}
-		
-		if(!this.unaVezDisparo) {
-			this.disparo.play();
-			this.unaVezDisparo = true;
-		}
-		
 	}
-	
+
 	private void dibujarHitboxes() {
-		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
+		contornoRango.begin(ShapeRenderer.ShapeType.Line);
 
-		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-		contornoDetector.rect(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
+		contornoRango.setColor(1, 0, 0, 1); // Rojo para las hitboxes
+		contornoRango.rect(animationX + 50, animationY + 20, Render.ANCHO - 270 - animationX + 218, 50);
 
-		contornoDetector.end();
-		
-//		contornoDetector.begin(ShapeRenderer.ShapeType.Line);
-//
-//		contornoDetector.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-//		contornoDetector.rect(super.animationX + 50, super.animationY + 42, peaHitbox.getWidth(), peaHitbox.getHeight());
-//
-//		contornoDetector.end();
+		contornoRango.end();
 	}
-	
+
 	// GETTERS
-	
+
 	public Rectangle getDetectorZombie() {
-		return detectorZombie;
+		return rangoDeteccion;
 	}
+
 	
 	// SETTERS
-	
-	public void setHitboxes() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
-		if(!unaVezDetector) {
-			this.detectorZombie = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO-270 - animationX + 218, 50);
-			unaVezDetector = true;
-			
-			this.peaHitbox = new Rectangle(super.animationX + 50, super.animationY + 42, 78/3, 30);
-			this.peaX = super.animationX + 50;
-			}
+
+	public void setRango() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
+		if (!unaVezSetRango) {
+			this.rangoDeteccion = new Rectangle(animationX + 10, animationY + 20, Render.ANCHO - 240 - animationX + 218, 50);
+
+			unaVezSetRango = true;
 		}
+	}
 	
+	
+	// DISPOSE
+	
+	@Override
+	public void disposeHerencias() {
+		this.sprites.dispose();
+	}
+
+
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import solesCerebros.SolCerebro;
+import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
 
@@ -31,9 +32,11 @@ public class Girasol extends Planta {
 	
 	@Override
 	protected void logicaHerencias() {
-		if(this.sol != null) {
-			this.sol.generarSol(this.animationX, this.animationY);
-		}	
+		if(!Globales.pausaActiva) {
+			if(this.sol != null) {
+				this.sol.generarSol(this.animationX, this.animationY);
+			}	
+		}
 	}
 	
 	@Override

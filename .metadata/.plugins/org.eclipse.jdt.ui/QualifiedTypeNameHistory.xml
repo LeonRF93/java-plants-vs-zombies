@@ -27,8 +27,8 @@
     <fullyQualifiedTypeName name="com.badlogic.gdx.graphics.Texture"/>
     <fullyQualifiedTypeName name="zombies.Zombie"/>
     <fullyQualifiedTypeName name="utilidades.Rutas"/>
-    <fullyQualifiedTypeName name="utilidades.Globales"/>
+    <fullyQualifiedTypeName name="utilidades.Entradas"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
     <fullyQualifiedTypeName name="utilidades.Render"/>
-    <fullyQualifiedTypeName name="utilidades.Entradas"/>
+    <fullyQualifiedTypeName name="utilidades.Globales"/>
 </qualifiedTypeNameHistroy>

@@ -16,7 +16,6 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
-import zombies.Caminable;
 import zombies.Zombie;
 
 public class Casilla {
@@ -112,6 +111,11 @@ public class Casilla {
 		if (this.zombies.size() > 0) {
 			for (int i = 0; i < zombies.size(); i++) {
 				this.zombies.get(i).ejecutar();
+				
+				if(this.zombies.get(i).morir()) {
+					this.zombies.remove(i);
+				}
+				
 			}
 		}
 
@@ -123,7 +127,9 @@ public class Casilla {
 		this.zombies.get(this.zombies.size() - 1).animationX = this.x - 15;
 		this.zombies.get(this.zombies.size() - 1).animationY = this.y;
 
-		this.zombies.get(this.zombies.size() - 1).setHitbox(this.x + 20, this.y + 10, this.ancho - 80, this.alto - 15);
+		this.zombies.get(this.zombies.size() - 1).setHitbox(this.x + 20, this.y + 10, 
+				this.zombies.get(this.zombies.size() - 1).getANCHO_HITBOX(), 
+				this.zombies.get(this.zombies.size() - 1).getALTO_HITBOX());
 	}
 
 	private void generarPlanta(PlantaZombie plantaZombieAux) {
@@ -132,7 +138,7 @@ public class Casilla {
 
 		this.planta.animationX = this.x - 15; // se le resta 15 para que la planta quede bien centrada
 		this.planta.animationY = this.y;
-		this.planta.setHitbox(this.x + 5, this.y + 10, this.ancho - 20, this.alto - 15);
+		this.planta.setHitbox(this.x + 25, this.y + 10, this.planta.getANCHO_HITBOX(), this.planta.getALTO_HITBOX() - 15);
 
 	}
 

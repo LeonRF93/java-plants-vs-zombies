@@ -19,6 +19,7 @@ public abstract class PlantaZombie {
 	private int coste;
 	private int vida;
 	protected int damage;
+	protected boolean muerto;
 
 	// imagenes
 	private Imagen imagen;
@@ -37,15 +38,17 @@ public abstract class PlantaZombie {
 	private float tiempoRecarga = 0f;
 	private boolean esDisponibleAlInicio;
 	
-	protected int RECARGA_MUY_LENTA = 20;
+	protected int RECARGA_MUY_LENTA = 75;
 	protected int RECARGA_LENTA = 55;
-	protected int RECARGA_RAPIDA = 5;
+	protected int RECARGA_RAPIDA = 15;
 	protected int RECARGA_PRECOZ = 0; //para testear sirve
 	private float restaNoCargado;
 	
 	//hitbox
 	protected Rectangle hitbox;
 	private ShapeRenderer contorno = new ShapeRenderer();
+	protected int ANCHO_HITBOX = 0;
+	protected int ALTO_HITBOX = 0;
 
 
 	public PlantaZombie(String nombre, int coste, int vida, int damage) {
@@ -59,6 +62,7 @@ public abstract class PlantaZombie {
 	}
 
 	public void ejecutar() {
+		dibujarHitbox();
 		logica();
 		dibujar();
 		logicaHerencias();
@@ -180,6 +184,14 @@ public abstract class PlantaZombie {
 		return this.animaciones.get(indice);
 	}
 	
+	public int getANCHO_HITBOX() {
+		return ANCHO_HITBOX;
+	}
+	
+	public int getALTO_HITBOX() {
+		return ALTO_HITBOX;
+	}
+	
 	
 	// SETTERS-AGREGADORES
 	
@@ -195,7 +207,7 @@ public abstract class PlantaZombie {
 		this.recarga = recarga;
 		
 		if(this.recarga == RECARGA_RAPIDA) {
-			this.restaNoCargado = 0.22f;
+			this.restaNoCargado = 0.073f;
 		}
 		if(this.recarga == RECARGA_LENTA) {
 			this.restaNoCargado = 0.020f;
