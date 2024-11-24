@@ -6,23 +6,23 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="sas"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
-			<item value="sas"/>
-			<item value="zombieDete"/>
-			<item value="caminable"/>
-			<item value="camina"/>
-			<item value="morir"/>
+			<item value="te han"/>
+			<item value="mut"/>
+			<item value="setVo"/>
 			<item value="play"/>
-			<item value="unaVezThrow"/>
-			<item value="sonidoThrow"/>
-			<item value="throw"/>
-			<item value="RECARGA"/>
-			<item value="COOLDOWN"/>
-			<item value="peaX"/>
-			<item value="unaVezDis"/>
-			<item value="unaVe"/>
-			<item value="guisantes"/>
+			<item value="playM"/>
+			<item value="pausarMu"/>
+			<item value="pau"/>
+			<item value="pausar()"/>
+			<item value="paus"/>
+			<item value="genera"/>
+			<item value="inicia"/>
+			<item value="overl"/>
+			<item value="overla"/>
+			<item value="over"/>
+			<item value="shape"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

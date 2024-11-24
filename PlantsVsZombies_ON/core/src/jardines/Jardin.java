@@ -19,6 +19,7 @@ public abstract class Jardin {
 	private String nombre;
 	private Imagen fondo;
 	private Music musica;
+	private Music musicaHorda;
 	
 	// Casillas
 	private int filasCasillas;
@@ -29,6 +30,7 @@ public abstract class Jardin {
 	private int distanciaColumnas = 2; // distanciaColumnas es la distancia entre cada columna
 	
 	// Zona de victoria de los zombies
+	private static int cantidadZombies = 0;
 	private ShapeRenderer contorno = new ShapeRenderer();
 	private Rectangle zonaVictoriaZombies;
 	private Sound loseMusic = Gdx.audio.newSound(Gdx.files.internal("audio/losemusic.mp3"));
@@ -58,6 +60,9 @@ public abstract class Jardin {
 
 	public void ejecutar() {
 		
+		controlarMusica();
+		controlarZombies();
+		
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
 				mostrarCasilla(i, j);
@@ -67,12 +72,19 @@ public abstract class Jardin {
 
 	}
 	
-	public void victoriaZombies() {
+	public void aumentarContZombies() {
+		this.cantidadZombies++;
+	}
+	
+	public void restarContZombies() {
+		this.cantidadZombies--;
+	}
+	
+	public void controlarZombies() {
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
 				for (int k = 0; k < casillas[i][j].getZombie().size(); k++) {
 					if(this.zonaVictoriaZombies.contains(casillas[i][j].getZombie().get(k).getHitbox())) {
-						
 						if(!unaVezLose) {
 							this.loseMusic.play(Globales.volumenSfx);
 							this.unaVezLose = true;
@@ -87,7 +99,7 @@ public abstract class Jardin {
 			sonidosVictoriaZombies();
 		}
 		
-		if(contadorMordiscos > 2) {
+		if(contadorMordiscos > 1) {
 			animacionVictoriaZombies();
 			Render.batch.begin();
 			teHanComidoLosSesos.dibujar();
@@ -130,9 +142,38 @@ public abstract class Jardin {
 			}
 		}
 	}
+	
+	private void controlarMusica() {
+		
+		if(Globales.pausaActiva) {
+			this.musica.pause();
+			this.musicaHorda.pause();
+		} else {
+			if(Globales.musicaOn) {
+				alternarMusicaHorda();
+			} else {
+				musica.setVolume(0f);
+				musicaHorda.setVolume(0f);
+			}
+		}
+		
+	}
+	
+	private void alternarMusicaHorda() {
+		
+		if(cantidadZombies > 10) {
+			musica.setVolume(0f);
+			musicaHorda.setVolume(1f);
+		} else {
+			musica.setVolume(1f);
+			musicaHorda.setVolume(0f);
+		}
+		
+	}
 
 	public void playMusica() {
 		musica.play();
+		musicaHorda.play();
 	}
 	
 	public void pausarMusica() {
@@ -141,10 +182,12 @@ public abstract class Jardin {
 	
 	public void mutearMusica() {
 		musica.setVolume(0f);
+		musicaHorda.setVolume(0f);
 	}
 	
 	public void desmutearMusica() {
 		musica.setVolume(1f);
+		musicaHorda.setVolume(1f);
 	}
 
 	
@@ -153,6 +196,15 @@ public abstract class Jardin {
 	protected void inicializarObjetos(Imagen fondo, Music musica, Vector2 alineacionGrilla) {
 		this.fondo = fondo;
 		this.musica = musica;
+		this.musica.setLooping(true);
+		this.alineacionGrilla = alineacionGrilla;
+		crearCasillas();
+	}
+	
+	protected void inicializarObjetos(Imagen fondo, Music musica, Music musicaHorda, Vector2 alineacionGrilla) {
+		this.fondo = fondo;
+		this.musica = musica;
+		this.musicaHorda = musicaHorda;
 		this.musica.setLooping(true);
 		this.alineacionGrilla = alineacionGrilla;
 		crearCasillas();
@@ -205,6 +257,7 @@ public abstract class Jardin {
 	public void dispose() {
 		this.fondo.dispose();
 		this.musica.dispose();
+		this.musicaHorda.dispose();
 		this.loseMusic.dispose();
 		this.grito.dispose();
 		this.mordisco.dispose();

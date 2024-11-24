@@ -130,7 +130,6 @@ public class Partida implements Screen {
 
 		Render.batch.setProjectionMatrix(camara.combined);
 		Globales.jardin.ejecutar();
-		Globales.jardin.victoriaZombies();
 		Render.batch.begin();
 		
 		sol.dibujar();
@@ -143,9 +142,6 @@ public class Partida implements Screen {
 			}
 
 		}
-		
-//		atlasLol.dibujar();
-//		zombiLol.dibujar();
 
 		Render.batch.end();
 
@@ -200,9 +196,9 @@ public class Partida implements Screen {
 		if (Globales.pausaActiva) {
 			if (!unaVezPausa) {
 				pausa.play(Globales.volumenSfx);
-				if (finCamaraInicial) {
-					Globales.jardin.pausarMusica();
-				}
+//				if (finCamaraInicial) {
+//					Globales.jardin.pausarMusica();
+//				}
 				unaVezPausa = true;
 			}
 			menuPausa();
@@ -283,11 +279,14 @@ public class Partida implements Screen {
 
 	private void ajustarVolumen() {
 
-		if (Globales.musicaOn) {
-			Globales.jardin.desmutearMusica();
-		} else {
-			Globales.jardin.mutearMusica();
-			selector.stop();
+//		if (Globales.musicaOn) {
+//			Globales.jardin.desmutearMusica();
+//		} else {
+//			Globales.jardin.mutearMusica();
+//			selector.stop();
+//		}
+		if(!Globales.musicaOn) {
+			selector.setVolume(0f);
 		}
 
 		if (Globales.sfxOn) {

@@ -113,6 +113,7 @@ public class Casilla {
 				this.zombies.get(i).ejecutar();
 				
 				if(this.zombies.get(i).morir()) {
+					Globales.jardin.restarContZombies();
 					this.zombies.remove(i);
 				}
 				
@@ -123,6 +124,8 @@ public class Casilla {
 
 	private void generarZombie(PlantaZombie plantaZombieAux) {
 
+		Globales.jardin.aumentarContZombies();
+		
 		this.zombies.add((Zombie) plantaZombieAux);
 		this.zombies.get(this.zombies.size() - 1).animationX = this.x - 15;
 		this.zombies.get(this.zombies.size() - 1).animationY = this.y;

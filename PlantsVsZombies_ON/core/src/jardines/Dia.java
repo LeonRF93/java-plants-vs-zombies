@@ -15,11 +15,12 @@ public class Dia extends Jardin {
 	Imagen imgDia = new Imagen(Rutas.ESCENARIO_DIA, Render.ANCHO + 300, Render.ALTO);
 
 	private Music mscDia = Gdx.audio.newMusic(Gdx.files.internal(Rutas.MUSICA_DIA));
+	private Music mscDiaHorda = Gdx.audio.newMusic(Gdx.files.internal(Rutas.MUSICA_DIA_HORDA));
 	private Vector2 alineacionGrilla = new Vector2(230, 380);
 	
 	public Dia() {
 		super("Dia",5,9, 220, Render.ALTO);
-		super.inicializarObjetos(imgDia, mscDia, alineacionGrilla);
+		super.inicializarObjetos(imgDia, mscDia, mscDiaHorda, alineacionGrilla);
 	}
 
 }

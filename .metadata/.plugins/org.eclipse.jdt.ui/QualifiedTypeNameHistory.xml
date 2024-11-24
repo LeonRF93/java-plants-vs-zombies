@@ -28,7 +28,8 @@
     <fullyQualifiedTypeName name="zombies.Zombie"/>
     <fullyQualifiedTypeName name="utilidades.Rutas"/>
     <fullyQualifiedTypeName name="utilidades.Entradas"/>
+    <fullyQualifiedTypeName name="java.awt.Rectangle"/>
     <fullyQualifiedTypeName name="com.badlogic.gdx.math.Rectangle"/>
-    <fullyQualifiedTypeName name="utilidades.Render"/>
     <fullyQualifiedTypeName name="utilidades.Globales"/>
+    <fullyQualifiedTypeName name="utilidades.Render"/>
 </qualifiedTypeNameHistroy>

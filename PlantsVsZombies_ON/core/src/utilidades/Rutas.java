@@ -38,6 +38,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	
 	// ---- MUSCIAS ----
 	 String MUSICA_DIA = "audio/Day-Stage_.mp3";
+	 String MUSICA_DIA_HORDA = "audio/Day-Stage-horde.mp3";
 	 String MUSICA_SELECTOR = "audio/Choose-Your-Seeds.mp3";
 	
 	// ---- HUD ----

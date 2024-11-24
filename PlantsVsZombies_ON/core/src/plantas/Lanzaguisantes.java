@@ -146,7 +146,7 @@ public class Lanzaguisantes extends Planta {
 		contornoRango.begin(ShapeRenderer.ShapeType.Line);
 
 		contornoRango.setColor(1, 0, 0, 1); // Rojo para las hitboxes
-		contornoRango.rect(animationX + 50, animationY + 20, Render.ANCHO - 270 - animationX + 218, 50);
+		contornoRango.rect(animationX + 50, animationY + 20, Render.ANCHO - 280 - animationX + 218, 50);
 
 		contornoRango.end();
 	}
@@ -162,7 +162,7 @@ public class Lanzaguisantes extends Planta {
 
 	public void setRango() { // se tiene que setear despues, para que las coordenadas sean bien tomadas
 		if (!unaVezSetRango) {
-			this.rangoDeteccion = new Rectangle(animationX + 10, animationY + 20, Render.ANCHO - 240 - animationX + 218, 50);
+			this.rangoDeteccion = new Rectangle(animationX + 50, animationY + 20, Render.ANCHO - 280 - animationX + 218, 50);
 
 			unaVezSetRango = true;
 		}
