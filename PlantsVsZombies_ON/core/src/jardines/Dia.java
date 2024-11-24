@@ -18,7 +18,7 @@ public class Dia extends Jardin {
 	private Vector2 alineacionGrilla = new Vector2(230, 380);
 	
 	public Dia() {
-		super("Dia",5,9);
+		super("Dia",5,9, 220, Render.ALTO);
 		super.inicializarObjetos(imgDia, mscDia, alineacionGrilla);
 	}
 

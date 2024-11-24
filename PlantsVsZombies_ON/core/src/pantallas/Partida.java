@@ -130,6 +130,7 @@ public class Partida implements Screen {
 
 		Render.batch.setProjectionMatrix(camara.combined);
 		Globales.jardin.ejecutar();
+		Globales.jardin.victoriaZombies();
 		Render.batch.begin();
 		
 		sol.dibujar();

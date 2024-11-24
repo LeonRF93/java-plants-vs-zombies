@@ -62,7 +62,6 @@ public abstract class PlantaZombie {
 	}
 
 	public void ejecutar() {
-		dibujarHitbox();
 		logica();
 		dibujar();
 		logicaHerencias();

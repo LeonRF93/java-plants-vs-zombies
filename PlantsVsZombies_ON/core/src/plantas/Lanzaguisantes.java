@@ -174,6 +174,9 @@ public class Lanzaguisantes extends Planta {
 	@Override
 	public void disposeHerencias() {
 		this.sprites.dispose();
+		
+		this.hit.dispose();
+		this.disparo.dispose();
 	}
 
 

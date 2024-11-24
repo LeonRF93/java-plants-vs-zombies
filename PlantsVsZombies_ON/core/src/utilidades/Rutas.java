@@ -15,6 +15,8 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	
 	//----  ZOMBIES ---- 
 	
+	 String ZOMBIES_VICTORIA = "img/zombies/victoriaZombies.png";
+	 
 	// Zombie basico
 	 String ZOMBIE_BASICO_ICONO = "img/zombies/zombie.png";
 	 String ZOMBIE_BASICO_SPRITES = "img/zombies/zombie-basico/zombie_basico.png";
