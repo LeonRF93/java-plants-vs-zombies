@@ -61,7 +61,7 @@ public class SolCerebro {
 		hitbox.setY(y);
 	}
 
-	public void ejecutar() {
+	public void logica() {
 		caer();
 		clickear();
 	}

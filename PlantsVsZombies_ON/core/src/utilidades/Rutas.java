@@ -5,9 +5,10 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	// ---------------------------------------- IMAGENES ---------------------------------------- //
 	
 	//----  HUD ----  
-	 String HUD_FONDO = "img/hud/fondo_hud.png";
+	 String HUD_FONDO = "img/hud/fondo_hud2.png";
 	 String HUD_SEED = "img/hud/seed.png";
 	 String HUD_SUN_COUNTER = "img/hud/suncounter.png";
+	 String HUD_PALA = "img/hud/lo que nunca vas a agarrar.png";
 	 String HUD_SUN = "img/suns_brains/sun.png";
 	 
 	//---- ESCENARIOS ----
@@ -53,6 +54,8 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 String SFX_SUN = "audio/solCerebro.mp3";
 	 String SFX_THROW = "audio/throw.mp3";
 	 String SFX_PLANTAR = "audio/plant.mp3";
+	 String SFX_DESPLANTAR = "audio/unplant.mp3";
+	 String SFX_PALA = "audio/shovel.mp3";
 	 
 	 // ---- PLANTAS ----
 	 String SFX_PEA = "audio/pea.mp3";

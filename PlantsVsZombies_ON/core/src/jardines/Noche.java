@@ -12,7 +12,7 @@ public class Noche extends Jardin {
 
 	// La imagen del fondo toma el ANCHO y el ALTO del Render.
 		// Le sumamos 300 al ANCHO para ajustar la imagen y que no se vea estirada
-		Imagen imgDia = new Imagen(Rutas.ESCENARIO_NOCHE, Render.ANCHO + 300, Render.ALTO);
+		Imagen imgNoche = new Imagen(Rutas.ESCENARIO_NOCHE, Render.ANCHO + 330, Render.ALTO);
 
 		private Music mscDia = Gdx.audio.newMusic(Gdx.files.internal(Rutas.MUSICA_NOCHE));
 		private Music mscDiaHorda = Gdx.audio.newMusic(Gdx.files.internal(Rutas.MUSICA_NOCHE_HORDA));
@@ -20,7 +20,8 @@ public class Noche extends Jardin {
 		
 		public Noche() {
 			super("Noche",5,9, 210, Render.ALTO);
-			super.inicializarObjetos(imgDia, mscDia, mscDiaHorda, alineacionGrilla);
+			super.inicializarObjetos(imgNoche, mscDia, mscDiaHorda, alineacionGrilla);
+			this.imgNoche.setX(-20);
 		}
 	
 }

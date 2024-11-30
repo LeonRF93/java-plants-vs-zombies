@@ -80,7 +80,7 @@ public class Partida implements Screen {
 		Gdx.input.setInputProcessor(new Entradas());
 
 		Hud.cantSoles = 5000;
-		Globales.jardin = new Dia();
+		Globales.jardin = new Noche();
 		
 		camara = new OrthographicCamera(Render.ANCHO, Render.ALTO);
 		camara.position.set(Render.ANCHO / 2, Render.ALTO / 2, 0);
@@ -130,7 +130,7 @@ public class Partida implements Screen {
 		// Capa de Plantas y soles
 
 		Render.batch.setProjectionMatrix(camara.combined);
-		Globales.jardin.ejecutar();
+		Globales.jardin.logica();
 		Globales.jardin.dibujar();
 		Globales.jardin.dibujarGuisante(); // Esto es para que el guisante pase por encima de las plantas
 		Render.batch.begin();
@@ -141,11 +141,11 @@ public class Partida implements Screen {
 
 			if (finCamaraInicial) {
 				hud.logica();
-				sol.ejecutar();
+				sol.logica();
 			}
 
 		}
-
+		hud.dibujarPala();
 		Render.batch.end();
 		
 		// Capa de pausa

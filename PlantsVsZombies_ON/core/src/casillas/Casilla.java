@@ -23,6 +23,7 @@ public class Casilla {
 
 	// Audio
 	private Sound plantar = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PLANTAR));
+	private Sound desplantar = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_DESPLANTAR));
 
 	// Plantas y zombies
 	private PlantaZombie planta = null;
@@ -79,6 +80,18 @@ public class Casilla {
 				}
 
 			}
+		}
+		
+		if(Hud.palaClickeda && !Globales.pausaActiva) {
+			if (this.casilla.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
+				if (Entradas.getBotonMouse() == 0) {
+					Hud.palaClickeda = false;
+						if(this.planta != null) {
+							Utiles.sonidoPitchRandom(this.desplantar, Globales.volumenSfx, 1.05f, 0.95f);
+							this.planta = null;
+						}
+					}
+				}
 		}
 	}
 	

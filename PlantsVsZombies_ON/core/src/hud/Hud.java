@@ -14,6 +14,7 @@ import utilidades.Imagen;
 import utilidades.Render;
 import utilidades.Rutas;
 import utilidades.Texto;
+import utilidades.Utiles;
 
 public class Hud {
 
@@ -60,6 +61,14 @@ public class Hud {
 	private float tiempoAnimacionChiwawa = 0f;
 	private boolean rojoTextoSoles;
 	
+	// la pala
+	private Imagen pala = new Imagen(Rutas.HUD_PALA, 99/2, 109/2);
+	private int PALA_HUD_X = 555, PALA_HUD_Y = 480;
+	private Rectangle palaHitbox = new Rectangle(PALA_HUD_X, PALA_HUD_Y, 99/2, 109/2);
+	private boolean unaVezClickPala;
+	private Sound palaClick = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_PALA));
+	public static boolean palaClickeda;
+	
 	public Hud(PlantaZombie[] plantasZombies) {
 
 		constructor(plantasZombies);
@@ -73,16 +82,22 @@ public class Hud {
 	
 	public void logica() {
 		
-		clickearPlanta();
-		recargarPlanta();
-		funcionesTextoSoles();
+		if(!Globales.pausaActiva) {
+			clickearPlanta();
+			recargarPlanta();
+			quitarPlanta();
+			funcionesTextoSoles();
+		}
 		
 	}
 	
-	public void dibujar() {
-		
+	public void dibujar() {	
 		mostrarHud();
 		textoSoles.dibujar();
+	}
+	
+	public void dibujarPala() {
+		this.pala.dibujar();
 	}
 
 	
@@ -106,6 +121,8 @@ public class Hud {
 		textoSoles.x = X_UNIDADES;
 		textoSoles.y = Y_TEXTO;
 		textoSoles.texto = String.valueOf(cantSoles);
+		
+		pala.setPosition(PALA_HUD_X, PALA_HUD_Y);
 
 		for (int i = 0; i < plantasZombies.length; i++) {
 			hitbox[i] = new Rectangle(xInicial + DISTANCIA_ENTRE_SEEDS * i, y, anchoSeed, altoSeed);
@@ -249,6 +266,39 @@ public class Hud {
 		}
 	}
 
+	private void quitarPlanta() {
+		
+		if(!this.palaClickeda) {
+			this.pala.setPosition(PALA_HUD_X, PALA_HUD_Y);
+			this.palaHitbox.setPosition(PALA_HUD_X, PALA_HUD_Y);
+		}
+		
+		// Seleccionar pala
+		if(this.palaHitbox.contains(Entradas.getMouseX(), Entradas.getMouseY())) {
+			if(Entradas.getBotonMouse() == 0) {
+				if(!this.unaVezClickPala && !this.palaClickeda) {
+					this.palaClickeda = true;
+					Utiles.sonidoPitchRandom(this.palaClick, Globales.volumenSfx, 1.05f, 0.95f);
+					this.unaVezClickPala = true;
+				}
+			} else {
+				this.unaVezClickPala = false;
+			}
+		}
+		
+		// Pala siguiendo al mouse
+		if(palaClickeda) {
+			
+			if(Entradas.getBotonMouse() == 1) {
+				this.deselect.play();
+				this.palaClickeda = false;
+			}
+ 			
+			this.pala.setPosition(Entradas.getMouseX(), Entradas.getMouseY());
+			this.palaHitbox.setPosition(Entradas.getMouseX(), Entradas.getMouseY());
+		}
+	}
+	
 	private void funcionesTextoSoles() {
 
 		textoSoles.setColor(Color.BLACK); // le pongo el color negro xq se lo tuve q poner rojo al crearlo xq sino no me
@@ -294,6 +344,7 @@ public class Hud {
 		cancel.dispose();
 
 		// Imagenes
+		pala.dispose();
 		seed.dispose();
 		sunFrame.dispose();
 		textoSoles.dispose();

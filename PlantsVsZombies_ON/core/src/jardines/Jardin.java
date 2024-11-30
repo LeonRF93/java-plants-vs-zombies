@@ -49,7 +49,7 @@ public abstract class Jardin {
 	private float tiempoMusica = 0f;
 	private float volumen = 1f;
 	private float volumenHorda = 0f;
-	private static int cantidadZombies = 0;
+	public static int cantidadZombies = 0;
 	private int cantidadHorda = 10;
 	
 	public Jardin(String nombre, int filasCasillas, int columnasCasillas, int anchoZona, int altoZona) {
@@ -62,19 +62,6 @@ public abstract class Jardin {
 		this.teHanComidoLosSesos.setPosition(260, 160);
 		
 		// inicializar objetos a traves del metodo homonimo
-	}
-
-	public void ejecutar() {
-		
-		controlarMusica();
-		controlarZombies();
-		
-		for (int i = 0; i < casillas.length; i++) {
-			for (int j = 0; j < casillas[i].length; j++) {
-				casillas[i][j].detectar();
-			}
-		}
-
 	}
 	
 	public void logica() {
@@ -307,6 +294,7 @@ public abstract class Jardin {
 	// DISPOSE
 	
 	public void dispose() {
+		
 		this.fondo.dispose();
 		this.musica.dispose();
 		this.musicaHorda.dispose();
