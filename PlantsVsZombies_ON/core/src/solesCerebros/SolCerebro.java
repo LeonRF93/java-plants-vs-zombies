@@ -84,7 +84,7 @@ public class SolCerebro {
 		if (this.tiempo > this.tiempoEnCaer) {
 			
 			if(!unaVezThrow) {
-				sonidoThrow.play(Globales.volumenSfx);
+				Utiles.sonidoPitchRandom(this.sonidoThrow, Globales.volumenSfx, 1.05f, 0.95f);
 				unaVezThrow = true;
 			}
 			
@@ -186,7 +186,7 @@ public class SolCerebro {
 
 		// reproducir todo una sola vez
 		if (!unaVezClick) {
-			this.sonidoClick.play(Globales.volumenSfx);
+			Utiles.sonidoPitchRandom(this.sonidoClick, Globales.volumenSfx, 1.05f, 0.95f);
 			if (Hud.cantSoles <= CANTIDAD_MAXIMA) {
 				Hud.cantSoles += VALOR;
 			}

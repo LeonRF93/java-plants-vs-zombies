@@ -10,6 +10,7 @@ import com.lionstavern.pvz.PvzPrincipal;
 
 import hud.Hud;
 import jardines.Dia;
+import jardines.Noche;
 import plantaYzombie.PlantaZombie;
 import plantas.Girasol;
 import plantas.Lanzaguisantes;
@@ -130,6 +131,8 @@ public class Partida implements Screen {
 
 		Render.batch.setProjectionMatrix(camara.combined);
 		Globales.jardin.ejecutar();
+		Globales.jardin.dibujar();
+		Globales.jardin.dibujarGuisante(); // Esto es para que el guisante pase por encima de las plantas
 		Render.batch.begin();
 		
 		sol.dibujar();
@@ -144,7 +147,7 @@ public class Partida implements Screen {
 		}
 
 		Render.batch.end();
-
+		
 		// Capa de pausa
 
 		camaraHud.update();
@@ -279,12 +282,6 @@ public class Partida implements Screen {
 
 	private void ajustarVolumen() {
 
-//		if (Globales.musicaOn) {
-//			Globales.jardin.desmutearMusica();
-//		} else {
-//			Globales.jardin.mutearMusica();
-//			selector.stop();
-//		}
 		if(!Globales.musicaOn) {
 			selector.setVolume(0f);
 		}

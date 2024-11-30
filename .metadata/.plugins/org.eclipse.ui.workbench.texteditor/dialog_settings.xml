@@ -6,25 +6,26 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value=""/>
+		<item key="selection" value="acciones"/>
 		<list key="findhistory">
-			<item value="te han"/>
-			<item value="mut"/>
-			<item value="setVo"/>
+			<item value="cantidad"/>
+			<item value="acciones"/>
+			<item value="ejecut"/>
+			<item value="dibujar"/>
+			<item value="ancho"/>
+			<item value="mutea"/>
+			<item value="vol"/>
+			<item value="sonid"/>
+			<item value="control"/>
+			<item value="playMusica"/>
+			<item value="musica.play"/>
 			<item value="play"/>
-			<item value="playM"/>
-			<item value="pausarMu"/>
-			<item value="pau"/>
-			<item value="pausar()"/>
-			<item value="paus"/>
-			<item value="genera"/>
-			<item value="inicia"/>
-			<item value="overl"/>
-			<item value="overla"/>
-			<item value="over"/>
-			<item value="shape"/>
+			<item value="playMu"/>
+			<item value="unaVezLose"/>
+			<item value="unaVez"/>
 		</list>
 		<list key="replacehistory">
+			<item value="Z"/>
 			<item value=""/>
 			<item value="Entradas"/>
 			<item value="EntradasMenu"/>

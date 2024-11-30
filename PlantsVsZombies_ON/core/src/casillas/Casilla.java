@@ -16,6 +16,7 @@ import utilidades.Entradas;
 import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
+import utilidades.Utiles;
 import zombies.Zombie;
 
 public class Casilla {
@@ -43,8 +44,8 @@ public class Casilla {
 	}
 
 	public void detectar() {
-
-		accionesPlantaZombie();
+		
+		logicaPlantaZombie();
 
 		// si no es -1 significa que hay una planta seleccionada
 		if (Hud.indiceClickeado != -1 && !Globales.pausaActiva) {
@@ -80,6 +81,38 @@ public class Casilla {
 			}
 		}
 	}
+	
+	public void dibujarGuisante() {
+		
+		// Esto es para que el guisante pase por encima de las plantas
+		if (planta != null && planta.getNombre() == "Lanzaguisantes") {
+			this.planta.dibujarHerencias();
+		}
+		
+	}
+	
+	public void dibujarPlantaZombie() { 
+		
+		if (planta != null && planta.getNombre() != "Lanzaguisantes") {
+
+			this.planta.dibujar();
+			this.planta.dibujarHerencias();
+		}
+		
+		// Esto es para que el guisante pase por encima de las plantas
+		if (planta != null && planta.getNombre() == "Lanzaguisantes") {
+			this.planta.dibujar();
+		}
+		
+		
+		if (this.zombies.size() > 0) {
+			for (int i = 0; i < zombies.size(); i++) {
+				this.zombies.get(i).dibujar();
+				this.zombies.get(i).dibujarHerencias();
+			}
+		}
+		
+	}
 
 	public void mostrarContorno() {
 		if (mostrar) {
@@ -94,9 +127,11 @@ public class Casilla {
 		}
 	}
 
+	
 	// FUNCIONES PRIVADAS
+	
 
-	private void accionesPlantaZombie() {
+	private void logicaPlantaZombie() {
 
 		// una vez planta la planta, reproducir su animación
 		if (planta != null) {
@@ -104,13 +139,15 @@ public class Casilla {
 			if (this.planta.morir()) {
 				this.planta = null;
 			} else {
-				this.planta.ejecutar();
+				this.planta.logica();
+				this.planta.logicaHerencias();
 			}
 		}
 		
 		if (this.zombies.size() > 0) {
 			for (int i = 0; i < zombies.size(); i++) {
-				this.zombies.get(i).ejecutar();
+				this.zombies.get(i).logica();
+				this.zombies.get(i).logicaHerencias();
 				
 				if(this.zombies.get(i).morir()) {
 					Globales.jardin.restarContZombies();
@@ -146,7 +183,7 @@ public class Casilla {
 	}
 
 	private void accionesHud(PlantaZombie plantaZombieAux) {
-		plantar.play(Globales.volumenSfx);
+		Utiles.sonidoPitchRandom(this.plantar, Globales.volumenSfx, 1.05f, 0.95f);
 		Hud.cantSoles -= plantaZombieAux.getCoste();
 		Globales.plantaReiniciarCooldown = Hud.nombreClickedo;
 		Hud.indiceClickeado = -1;

@@ -12,6 +12,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 
 	//---- ESCENARIOS ----
 	 String ESCENARIO_DIA = "img/escenarios/dia.png";
+	 String ESCENARIO_NOCHE = "img/escenarios/noche.png";
 	
 	//----  ZOMBIES ---- 
 	
@@ -19,7 +20,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 
 	// Zombie basico
 	 String ZOMBIE_BASICO_ICONO = "img/zombies/zombie.png";
-	 String ZOMBIE_BASICO_SPRITES = "img/zombies/zombie-basico/zombie_basico.png";
+	 String ZOMBIE_BASICO_SPRITES = "img/zombies/zombie_basico2.png";
 	
 	//---- PLANTAS ----
 	
@@ -37,9 +38,11 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	// ---------------------------------------- AUDIO ---------------------------------------- //
 	
 	// ---- MUSCIAS ----
+	 String MUSICA_SELECTOR = "audio/Choose-Your-Seeds.mp3";
 	 String MUSICA_DIA = "audio/Day-Stage_.mp3";
 	 String MUSICA_DIA_HORDA = "audio/Day-Stage-horde.mp3";
-	 String MUSICA_SELECTOR = "audio/Choose-Your-Seeds.mp3";
+	 String MUSICA_NOCHE = "audio/Night-Stage_.mp3";
+	 String MUSICA_NOCHE_HORDA = "audio/Night-Stage-horde.mp3";
 	
 	// ---- HUD ----
 	 String SFX_CHIWAWA = "audio/chiwawa.mp3";
@@ -55,6 +58,7 @@ public interface Rutas { // interfaz asi no estamos poniendo siempre 'public sta
 	 String SFX_PEA = "audio/pea.mp3";
 
 	// ---- ZOMBIES ----
+	 String SFX_POP = "audio/pop.mp3";
 	 String SFX_MASTICAR = "audio/chompZombi.mp3";
 	 String SFX_TRAGAR = "audio/tragar.mp3";
 	

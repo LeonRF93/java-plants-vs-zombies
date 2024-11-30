@@ -17,7 +17,7 @@ public abstract class PlantaZombie {
 	// Datos generales
 	private String nombre;
 	private int coste;
-	private int vida;
+	protected int vida;
 	protected int damage;
 	protected boolean muerto;
 
@@ -73,10 +73,10 @@ public abstract class PlantaZombie {
 	
 	// por si una clase hija tiene funciones y hay que agruparlas a todas sin tener que 
 	// sobreescribir la funcion logica, evitando perder así las funciones que se heredan
-	protected void logicaHerencias() {
+	public void logicaHerencias() {
 		
 	}
-	protected void dibujarHerencias() {
+	public void dibujarHerencias() {
 	}
 	
 	public void dibujarIcono() { // la fotito del hud

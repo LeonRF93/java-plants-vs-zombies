@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
+import utilidades.Utiles;
 
 public class Lanzaguisantes extends Planta {
 
@@ -47,7 +48,7 @@ public class Lanzaguisantes extends Planta {
 	}
 
 	@Override
-	protected void logicaHerencias() {
+	public void logicaHerencias() {
 		if (!Globales.pausaActiva) {
 
 			detectarZombie();
@@ -56,7 +57,7 @@ public class Lanzaguisantes extends Planta {
 	}
 
 	@Override
-	protected void dibujarHerencias() {
+	public void dibujarHerencias() {
 		
 			if(this.guisantes.size() > 0) {
 				for (int i = 0; i < guisantes.size(); i++) {
@@ -121,7 +122,7 @@ public class Lanzaguisantes extends Planta {
 						.getZombie().get(indiceZombie).getHitbox())) {
 		
 					Globales.jardin.getCasillas()[casillaFila][casillaColumna].getZombie().get(indiceZombie).perderVida(super.damage);
-					this.hit.play(Globales.volumenSfx);
+					Utiles.sonidoPitchRandom(this.hit, Globales.volumenSfx, 1.1f, 0.9f);
 					this.guisantes.get(i).getHitbox().y = -5000;
 					this.guisantes.remove(i);
 				}
@@ -137,7 +138,7 @@ public class Lanzaguisantes extends Planta {
 		} else {
 			this.tiempoPea = 0f;
 			this.guisantes.add(new Guisante(peaRegion, super.animationX + 50, super.animationY + 42));
-			this.disparo.play(Globales.volumenSfx);
+			Utiles.sonidoPitchRandom(this.disparo, Globales.volumenSfx, 1.1f, 0.9f);
 
 		}
 	}

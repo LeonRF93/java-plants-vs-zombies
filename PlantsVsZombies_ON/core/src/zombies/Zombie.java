@@ -10,6 +10,7 @@ import utilidades.Animacion;
 import utilidades.Globales;
 import utilidades.Render;
 import utilidades.Rutas;
+import utilidades.Utiles;
 
 public abstract class Zombie extends PlantaZombie {
 	
@@ -18,6 +19,8 @@ public abstract class Zombie extends PlantaZombie {
 	private boolean unaVezMordisco;
 	private Sound traga = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_TRAGAR));
 	private boolean unaVezTraga;
+	private Sound pop = Gdx.audio.newSound(Gdx.files.internal(Rutas.SFX_POP));
+	private boolean unaVezPop;
 
 	// Tiempos
 	public float tiempoCaminar = 0f;
@@ -25,17 +28,23 @@ public abstract class Zombie extends PlantaZombie {
 	
 	// Otros
 	private int[] casillaPlanta = new int[2];
+	private int MITAD_DE_VIDA;
 	
 	protected int ANCHO_HITBOX = 10;
 	protected int ALTO_HITBOX = 70;
 	
 	// Animaciones
-	protected final int ANIM_CAMINAR = 1, ANIM_COMER = 2;
+	protected final int ANIM_CAMINAR = 1;
+	protected final int ANIM_COMER = 2;
+	protected final int ANIM_CAMINAR_UNBRAZO = 3;
+	protected final int ANIM_COMER_UNBRAZO = 4;
 
 	public Zombie(String nombre, int coste, int vida, int damage) {
 		super(nombre, coste, vida, damage);
 		super.ANCHO_HITBOX = 25;
 		super.ALTO_HITBOX = 70;
+		
+		this.MITAD_DE_VIDA = super.vida/2;
 
 	}
 	
@@ -44,6 +53,8 @@ public abstract class Zombie extends PlantaZombie {
 		super(nombre, coste, vida, 20);
 		super.ANCHO_HITBOX = 25;
 		super.ALTO_HITBOX = 70;
+		
+		this.MITAD_DE_VIDA = super.vida/2;
 	}
 	
 	@Override
@@ -51,14 +62,31 @@ public abstract class Zombie extends PlantaZombie {
 
 		if(!Globales.pausaActiva) {
 			
+			if(super.vida <= MITAD_DE_VIDA && !this.unaVezPop) {
+				Utiles.sonidoPitchRandom(this.pop, Globales.volumenSfx, 1.05f, 0.95f);
+				this.unaVezPop = true;
+			}
+			
 			if(!detectarPlanta()) {
-				super.estado_anim = ANIM_CAMINAR;
+				
+				if(super.vida <= MITAD_DE_VIDA) {
+					super.estado_anim = ANIM_CAMINAR_UNBRAZO;
+				} else {
+					super.estado_anim = ANIM_CAMINAR;
+				}
+				
 				caminar();
 				tragar();
 				
 			unaVezMordisco = false;
 			} else {
-				super.estado_anim = ANIM_COMER;
+
+				if(super.vida <= MITAD_DE_VIDA) {
+					super.estado_anim = ANIM_COMER_UNBRAZO;
+				} else {
+					super.estado_anim = ANIM_COMER;
+				}
+				
 				comer(casillaPlanta[0], casillaPlanta[1]);
 			}
 			
@@ -98,14 +126,14 @@ public abstract class Zombie extends PlantaZombie {
 
 	private void comer(int i, int j) {
 		if(!unaVezMordisco) {
-			mordisco.play(Globales.volumenSfx);
+			Utiles.sonidoPitchRandom(this.mordisco, Globales.volumenSfx, 1.05f, 0.95f);
 			unaVezMordisco = true;
 		}
 		
 		tiempoComer += Render.getDeltaTime();
 		if (tiempoComer > 0.5f) {
 			tiempoComer = 0f;
-			mordisco.play(Globales.volumenSfx);
+			Utiles.sonidoPitchRandom(this.mordisco, Globales.volumenSfx, 1.05f, 0.95f);
 			Globales.jardin.getCasillas()[i][j].getPlanta().perderVida(super.damage);
 			this.unaVezTraga = true;
 		}
@@ -113,7 +141,7 @@ public abstract class Zombie extends PlantaZombie {
 	
 	private void tragar() {
 		if(unaVezTraga) {
-			traga.play(Globales.volumenSfx);
+			Utiles.sonidoPitchRandom(this.traga, Globales.volumenSfx, 1.05f, 0.95f);
 			unaVezTraga = false;
 		}
 	}

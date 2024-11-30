@@ -9,15 +9,17 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
+
+import com.badlogic.gdx.audio.Sound;
 
 public class Utiles {
 
 	public static Scanner s = new Scanner(System.in);
 	public static Random r = new Random();
 
-	
+	public static void sonidoPitchRandom (Sound sonido, float volumen, float max, float min) {
+		sonido.setPitch(sonido.play(volumen), r.nextFloat(max - min) + min); //(max - min) + min
+	}
 	
 	public static int ingresarEntero(int min, int max) {
 		int numero = 0;

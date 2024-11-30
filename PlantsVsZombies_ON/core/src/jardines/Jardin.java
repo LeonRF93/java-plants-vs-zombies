@@ -30,7 +30,6 @@ public abstract class Jardin {
 	private int distanciaColumnas = 2; // distanciaColumnas es la distancia entre cada columna
 	
 	// Zona de victoria de los zombies
-	private static int cantidadZombies = 0;
 	private ShapeRenderer contorno = new ShapeRenderer();
 	private Rectangle zonaVictoriaZombies;
 	private Sound loseMusic = Gdx.audio.newSound(Gdx.files.internal("audio/losemusic.mp3"));
@@ -45,6 +44,13 @@ public abstract class Jardin {
 		private Imagen teHanComidoLosSesos = new Imagen(Rutas.ZOMBIES_VICTORIA, Render.ANCHO/2, Render.ALTO/2);
 		private int xInicial = 260, yInicial = 160;
 		private float tiempoAnimacion = 0f;
+		
+	// Musica
+	private float tiempoMusica = 0f;
+	private float volumen = 1f;
+	private float volumenHorda = 0f;
+	private static int cantidadZombies = 0;
+	private int cantidadHorda = 10;
 	
 	public Jardin(String nombre, int filasCasillas, int columnasCasillas, int anchoZona, int altoZona) {
 		this.nombre = nombre;
@@ -65,11 +71,30 @@ public abstract class Jardin {
 		
 		for (int i = 0; i < casillas.length; i++) {
 			for (int j = 0; j < casillas[i].length; j++) {
-				mostrarCasilla(i, j);
-				detectarCasilla(i, j);
+				casillas[i][j].detectar();
 			}
 		}
 
+	}
+	
+	public void logica() {
+		controlarMusica();
+		controlarZombies();
+		
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				casillas[i][j].detectar();
+			}
+		}
+	}
+	
+	public void dibujar() {
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				mostrarCasilla(i, j);
+				casillas[i][j].dibujarPlantaZombie();
+			}
+		}
 	}
 	
 	public void aumentarContZombies() {
@@ -88,7 +113,6 @@ public abstract class Jardin {
 						if(!unaVezLose) {
 							this.loseMusic.play(Globales.volumenSfx);
 							this.unaVezLose = true;
-							Globales.musicaOn = false;
 						}
 					}
 				}
@@ -142,6 +166,14 @@ public abstract class Jardin {
 			}
 		}
 	}
+
+	public void dibujarGuisante() {
+		for (int i = 0; i < casillas.length; i++) {
+			for (int j = 0; j < casillas[i].length; j++) {
+				casillas[i][j].dibujarGuisante();
+			}
+		}
+	}
 	
 	private void controlarMusica() {
 		
@@ -150,10 +182,13 @@ public abstract class Jardin {
 			this.musicaHorda.pause();
 		} else {
 			if(Globales.musicaOn) {
-				alternarMusicaHorda();
+				if(unaVezLose) {
+					mutearMusica();
+				} else {
+					alternarMusicaHorda();
+				}
 			} else {
-				musica.setVolume(0f);
-				musicaHorda.setVolume(0f);
+				mutearMusica();
 			}
 		}
 		
@@ -161,13 +196,34 @@ public abstract class Jardin {
 	
 	private void alternarMusicaHorda() {
 		
-		if(cantidadZombies > 10) {
-			musica.setVolume(0f);
-			musicaHorda.setVolume(1f);
+		this.tiempoMusica += Render.getDeltaTime();
+		
+		if(cantidadZombies > cantidadHorda) {
+
+			if(this.tiempoMusica > 0.1 && this.volumenHorda <= 1f) {
+				this.volumen -= 0.1;
+				this.volumenHorda += 0.1f;
+				this.tiempoMusica = 0f;
+				if(this.volumen <= 0.1f) {
+					this.volumen = 0;
+				}
+			}
+		
+			
 		} else {
-			musica.setVolume(1f);
-			musicaHorda.setVolume(0f);
+
+			if(this.tiempoMusica > 0.1 && this.volumen <= 1f) {
+				this.volumen += 0.1;
+				this.volumenHorda -= 0.1f;
+				this.tiempoMusica = 0f;
+				if(this.volumenHorda <= 0.1f) {
+					this.volumenHorda = 0;
+				}
+			}
 		}
+		
+		musica.setVolume(this.volumen);
+		musicaHorda.setVolume(this.volumenHorda);
 		
 	}
 
@@ -208,10 +264,6 @@ public abstract class Jardin {
 		this.musica.setLooping(true);
 		this.alineacionGrilla = alineacionGrilla;
 		crearCasillas();
-	}
-	
-	private void detectarCasilla(int i, int j) {
-		casillas[i][j].detectar();
 	}
 
 	private void mostrarCasilla(int i, int j) {

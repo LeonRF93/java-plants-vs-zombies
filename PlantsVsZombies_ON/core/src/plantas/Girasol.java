@@ -31,7 +31,7 @@ public class Girasol extends Planta {
 
 	
 	@Override
-	protected void logicaHerencias() {
+	public void logicaHerencias() {
 		if(!Globales.pausaActiva) {
 			if(this.sol != null) {
 				this.sol.generarSol(this.animationX, this.animationY);
@@ -40,7 +40,7 @@ public class Girasol extends Planta {
 	}
 	
 	@Override
-	protected void dibujarHerencias() {
+	public void dibujarHerencias() {
 		Render.batch.begin();
 		this.sol.dibujar();
 		Render.batch.end();
